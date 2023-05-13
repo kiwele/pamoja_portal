@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useRefreshToken from "../hooks/useRefreshToken";
+import { Box } from "@material-ui/core";
 // import { toast } from "react-toastify";
 
 const BASE_URL = process.env.BASE_URL;
@@ -73,7 +74,16 @@ const columns = [
  
 ];
 
-const options = {
+
+
+const UserDatatable = () => {
+ const [memberId, setMemberId] = useState() 
+ const [data, setData] = useState()
+ const axiosPrivate = useAxiosPrivate();
+
+ const options = {
+  search: true,
+  deleting: true,
   filterType: "checkbox",
   tableBodyMaxHeight: "100%",
   responsive: "scroll",
@@ -81,31 +91,61 @@ const options = {
   customToolbarSelect: (selectedRows, displayData, setSelectedRows) => {
     // console.log(selectedRows.data[0].index);
     console.log(displayData[0].data[6]);
+    setMemberId(displayData[0].data[6]);
     
   },
-  customToolbar: () => {
+  customSearch: (searchQuery, currentRow, columns) => {
+    return  true
+     },
+  customToolbar: ({displayData}) => {
 
-  } ,
-  serverSide: true
+     },
+  serverSide: true,
+
+
+  // new options
+  textLabels: {
+    body: {
+      noMatch: "Sorry, no matching records found",
+      toolTip: "Sort",
+      columnHeaderTooltip: column => `Sort for ${column.label}`
+    },
+    pagination: {
+      next: "Next Page",
+      previous: "Previous Page",
+      rowsPerPage: "Rows per page:",
+      displayRows: "of",
+    },
+    toolbar: {
+      search: "Search",
+      downloadCsv: "Download CSV",
+      print: "Print",
+      viewColumns: "View Columns",
+      filterTable: "Filter Table",
+    },
+    filter: {
+      all: "All",
+      title: "FILTERS",
+      reset: "RESET",
+    },
+    viewColumns: {
+      title: "Show Columns",
+      titleAria: "Show/Hide Table Columns",
+    },
+    selectedRows: {
+      text: "row(s) selected",
+      delete: "Delete",
+      deleteAria: "Delete Selected Rows",
+    },
+  }
+  // end options
 };
 
 
-const UserDatatable = () => {
- const [data, setData] = useState()
- const axiosPrivate = useAxiosPrivate();
- const refresh = useRefreshToken();
 
  useEffect(() => {
 
   axiosPrivate('/members')
-  // .
-  // axios
-  // .get("http://localhost:4000/members", {
-  //   headers: {
-  //     token: localStorage.getItem("token"),
-  //   },
-  //   withCredentials: true,
-  // })
   .then((e) => {
     let dd = e.data.data;
     const neswData = dd.map(dt => (
@@ -127,26 +167,32 @@ const UserDatatable = () => {
 
   return (
     <div>
+      <Box>
+
       <Button>
         <NavLink
           className="navbar-item"
           activeClassName="is-active"
-          to="/register_member"
+          to="/admin_register_member"
         >
           add new
         </NavLink>
       </Button>
+      
+      </Box>
 
-      <MUIDataTable
+
+     <Box>
+     <MUIDataTable
+        size="small"
         title={"Members"}
         data={data}
         columns={columns}
         options={options}
       />
+     </Box>
+ 
 
-      <div>
-        <button onClick={() => {refresh()}}>refresh</button>
-      </div>
     </div>
   );
 };

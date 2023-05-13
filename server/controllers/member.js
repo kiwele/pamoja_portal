@@ -9,13 +9,15 @@
 import bcrypt from 'bcryptjs';
 
 import db from '../database.js';
-import schoolstudied from '../models/schoolstudied.js';
+import { sendEMail } from '../middlewares/sendEmail.js';
 
 const { Member } = db.members;
 const { MemberLocation } = db.memberLocation;
 const { SchoolStudied } = db.schoolstudied;
 const { WorkExperience } = db.work_experience;
 const { User } = db.user;
+const { MaritalStatus } = db.maritalStatus;
+const { ActiveStatus } = db.activeStatus;
 
 // // get user image
 // const getUser = async (req, res) => {
@@ -38,13 +40,12 @@ const registerMember = async (req, res) => {
       where: { email: req.body.email },
     });
     if (checkMember !== null) {
-      res
-        .status(400)
-        .json({ message: 'user already exist' });
+      res.status(400).json({ message: 'user already exist' });
     }
 
     if (checkMember === null) {
       bcrypt.hash(req.body.password, 10, async (err, hash) => {
+        console.log(req.body);
         const regInfo = {
           email: req.body.email,
           password: hash,
@@ -54,8 +55,6 @@ const registerMember = async (req, res) => {
 
         // Save user in the User table
         const memberAdded = await User.create(regInfo);
-
-        console.log(memberAdded.dataValues.userId);
 
         const memberInfo = {
           memberId: memberAdded.dataValues.userId,
@@ -74,6 +73,8 @@ const registerMember = async (req, res) => {
           region: req.body.region,
           memberId: memberAdded.dataValues.userId,
         });
+        console.log(req.body.password);
+        await sendEMail(req.body.email, req.body.password);
 
         res.status(204).json({
           message: 'member registered successifully',
@@ -87,9 +88,10 @@ const registerMember = async (req, res) => {
 
 // academic informations
 const addAcademicInfo = async (req, res) => {
+  // console.log(req.body);
   try {
     await SchoolStudied.create({
-      school_names: req.body.school,
+      school_names: req.body.schoolName,
       study_taken: req.body.program,
       award: req.body.award,
       start_date: req.body.startDate,
@@ -106,15 +108,13 @@ const addAcademicInfo = async (req, res) => {
 
 // working experience
 const workingExperience = async (req, res) => {
-  console.log(req.body);
-  console.log(req.userDetails);
   try {
     await WorkExperience.create({
       organization: req.body.organization,
       position_title: req.body.positionTitle,
       start_date: req.body.startDate,
       end_date: req.body.endDate,
-      // memberId: req.userDetails.id,
+      memberId: req.userDetails.id,
     });
     res.status(204).json({
       message: 'Experience added successifully',
@@ -128,23 +128,150 @@ const workingExperience = async (req, res) => {
 const getAllMembers = async (req, res) => {
   try {
     const members = await Member.findAll({
-      includes: [
+      include: [
         {
-          model: schoolstudied,
+          model: SchoolStudied,
           attributes: ['school_names'],
         },
         {
           model: MemberLocation,
           attributes: ['region'],
         },
+        {
+          model: ActiveStatus,
+
+        },
       ],
     });
+    console.log(members);
     res.status(200).json({ data: members });
   } catch (error) {
     throw error;
   }
 };
 
+const personalInfo = async (req, res) => {
+  try {
+    const userInfo = await Member.findOne({
+      where: { memberId: req.userDetails.id },
+      include: [
+        {
+          model: MemberLocation,
+          attributes: ['region'],
+        },
+        {
+          model: MaritalStatus,
+          attributes: ['status_name'],
+        },
+      ],
+    });
+
+    console.log(userInfo);
+    res.status(200).json({ data: userInfo });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAcademicInfo = async (req, res) => {
+  try {
+    const academicInfo = await SchoolStudied.findAll({
+      where: { memberId: req.userDetails.id },
+      attributes: ['school_names', 'study_taken', 'award'],
+    });
+
+    res.status(200).json({ data: academicInfo });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getworkInfo = async (req, res) => {
+  try {
+    const workInfo = await WorkExperience.findAll({
+      where: { memberId: req.userDetails.id },
+      attributes: ['organization', 'position_title', 'start_date'],
+    });
+    res.status(200).json({ data: workInfo });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// admin view member personal information
+const adminViewMemberPersonalInfo = async (req, res) => {
+  try {
+    const userInfo = await Member.findOne({
+      where: { memberId: req.params.id },
+      include: [
+        {
+          model: MemberLocation,
+          attributes: ['region'],
+        },
+        {
+          model: MaritalStatus,
+          attributes: ['status_name'],
+        },
+      ],
+    });
+
+    console.log(userInfo);
+    res.status(200).json({ data: userInfo });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const adminViewMemberAcademicInfo = async (req, res) => {
+  try {
+    const academicInfo = await SchoolStudied.findAll({
+      where: { memberId: req.params.id },
+      attributes: ['school_names', 'study_taken', 'award'],
+    });
+
+    res.status(200).json({ data: academicInfo });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const adminViewMemberWorkInfo = async (req, res) => {
+  try {
+    const workInfo = await WorkExperience.findAll({
+      where: { memberId: req.params.id },
+      attributes: ['organization', 'position_title', 'start_date'],
+    });
+    res.status(200).json({ data: workInfo });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteMember = async (req, res) => {
+  try {
+    await Member.destroy({
+      where: { memberId: req.params.id },
+    });
+    await User.destroy({
+      where: { UserId: req.params.id },
+    });
+
+    res.status(200).json({ message: 'user deleted successifully' });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
-  registerMember, getAllMembers, addAcademicInfo, workingExperience,
+  registerMember,
+  getAllMembers,
+  addAcademicInfo,
+  workingExperience,
+  personalInfo,
+  getAcademicInfo,
+  getworkInfo,
+  adminViewMemberPersonalInfo,
+  adminViewMemberAcademicInfo,
+  adminViewMemberWorkInfo,
+  deleteMember,
 };

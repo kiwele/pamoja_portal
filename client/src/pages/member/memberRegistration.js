@@ -14,7 +14,7 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { usermainListItems } from "./userListItems";
+import { membermainListItems } from "../../Component/memberItemList";
 import AddProfilePicture from "../../Component/addProfilePicture";
 import ResetPassword from "../../Component/resetPassword";
 import ImageAvatars from "../../Component/avatarImg";
@@ -88,7 +88,7 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function RegisterMembers() {
+function MembersRegistration() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -143,7 +143,7 @@ function RegisterMembers() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {usermainListItems}
+            {membermainListItems}
             <Divider sx={{ my: 1 }} />
             {/* {secondaryListItems} */}
           </List>
@@ -162,45 +162,32 @@ function RegisterMembers() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-
-            <Box sx={12}>
-            <RegisterMemberForm />
-            </Box>
-            
-            {/* <Grid
+            <Grid
               container
               // direction="column"
               spacing={13}
               justify="flex-end"
               alignItems="flex-end"
             >
-              <Grid item sx={12}>
+              <Grid item xs={12}>
                 <RegisterMemberForm />
               </Grid>
-              {/* <Grid item xs={12}>
+              <Grid item xs={12}>
                 <AddAcademicInfo />
               </Grid>
               <Grid item xs={12}>
                 <AddWorkExperience />
-              </Grid> */}
-            {/* </Grid> */} 
+              </Grid>
+            </Grid>
            
           </Container>
-          {/* <Box 
-          sx={{
-            pt: 4,
-            minWidth: 300,
-          }}>
-
           <Copyright sx={{ pt: 4 }} />
-          </Box> */}
-          
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
 
-export default function RegisterMember() {
-  return <RegisterMembers />;
+export default function MemberRegister() {
+  return <MembersRegistration />;
 }

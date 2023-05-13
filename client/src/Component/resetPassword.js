@@ -1,7 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
-import {  createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -9,21 +10,25 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { TextField } from "@material-ui/core";
 import axios from "axios";
-import { toast } from "react-toastify";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 
-
-
-
-
+function refreshPage() {
+  window.location.reload();
+}
 
 const mdTheme = createTheme();
 
 function RegisterBookContent() {
-//   const dispatch = useDispatch();
+  const [showAlert, setShowAlert] = useState({
+    status: false,
+    severity: "",
+    message: "",
+  });
 
   const [data, setData] = useState({ newPassword: "" });
 
+  const axiosPrivate = useAxiosPrivate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,29 +37,43 @@ function RegisterBookContent() {
 
     formData.append("newPassword", data.newPassword);
 
-    
-    axios.post('http://localhost:4000/reset_password', formData, { 
-     
-        headers: {
-       "token": localStorage.getItem("token")
-     },
-     withCredentials: true } 
-   )
-    .then((e)=> {
-      toast.success('updated successifully')
-    })
-    .catch((e)=> {
-      
-      toast.error('error')
-   
-    })
-
+    axiosPrivate
+      .post("/reset_password", formData)
+      .then((e) => {
+        // set alert
+        setShowAlert({
+          ...showAlert,
+          status: true,
+          message: "password updated successifully",
+          severity: "success",
+        });
+        setTimeout(() => {
+          setShowAlert({ ...showAlert, status: false });
+          refreshPage();
+        }, 2000);
+      })
+      .catch((e) => {
+        setShowAlert({
+          ...showAlert,
+          status: true,
+          message: "something went wrong",
+          severity: "error",
+        });
+        setTimeout(() => {
+          setShowAlert({ ...showAlert, status: false });
+          refreshPage();
+        }, 2000);
+      });
   };
 
   return (
     <ThemeProvider theme={mdTheme}>
       <Grid container component="main" sx={{ height: "50vh" }}>
         <CssBaseline />
+
+        {showAlert.status && (
+        <Alert severity= {showAlert.severity}>{showAlert.message}</Alert>
+      )}
 
         <Grid
           item
@@ -96,7 +115,9 @@ function RegisterBookContent() {
                 autoComplete="text"
                 autoFocus
                 value={data.newPassword}
-                onChange={(e) => setData({ ...data, newPassword: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, newPassword: e.target.value })
+                }
               />
 
               <Button
@@ -113,8 +134,7 @@ function RegisterBookContent() {
                     Forgot password?
                   </Link>
                 </Grid> */}
-                <Grid item>
-                </Grid>
+                <Grid item></Grid>
               </Grid>
               {/* <Copyright sx={{ mt: 5 }} /> */}
             </Box>

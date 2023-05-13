@@ -4,6 +4,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PeopleIcon from '@mui/icons-material/People';
+import HomeIcon from '@mui/icons-material/Home';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export const usermainListItems = (
   <React.Fragment>
@@ -15,7 +17,7 @@ export const usermainListItems = (
       }}
     >
       <ListItemIcon>
-       <PeopleIcon/>
+       <HomeIcon/>
       </ListItemIcon>
       <ListItemText primary="Home" />
     </ListItemButton>

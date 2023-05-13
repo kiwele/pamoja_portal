@@ -13,6 +13,7 @@ import userRole from './models/userRole.js';
 const sequelize = new Sequelize('Pamoja_portal', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
+  port: 3306,
 });
 
 const db = {};
@@ -39,27 +40,11 @@ db.user.User.belongsTo(db.userRole.UserRole, {
   foreignKey: 'roleId',
 });
 
-// member and school studied
-db.members.Member.hasMany(db.schoolstudied.SchoolStudied, {
-  foreignKey: 'memberId',
-});
-db.schoolstudied.SchoolStudied.belongsTo(db.members.Member, {
-  foreignKey: 'memberId',
-});
-
 // member and work experince
 db.members.Member.hasMany(db.work_experience.WorkExperience, {
   foreignKey: 'memberId',
 });
 db.work_experience.WorkExperience.belongsTo(db.members.Member, {
-  foreignKey: 'memberId',
-});
-
-// member and work  location
-db.members.Member.hasMany(db.memberLocation.MemberLocation, {
-  foreignKey: 'memberId',
-});
-db.memberLocation.MemberLocation.belongsTo(db.members.Member, {
   foreignKey: 'memberId',
 });
 
@@ -77,6 +62,22 @@ db.activeStatus.ActiveStatus.hasMany(db.members.Member, {
 });
 db.members.Member.belongsTo(db.activeStatus.ActiveStatus, {
   foreignKey: 'activeId',
+});
+
+// // member and work  location
+db.members.Member.hasMany(db.memberLocation.MemberLocation, {
+  foreignKey: 'memberId',
+});
+db.memberLocation.MemberLocation.belongsTo(db.members.Member, {
+  foreignKey: 'memberId',
+});
+
+// member and school studied
+db.members.Member.hasMany(db.schoolstudied.SchoolStudied, {
+  foreignKey: 'memberId',
+});
+db.schoolstudied.SchoolStudied.belongsTo(db.members.Member, {
+  foreignKey: 'memberId',
 });
 
 export default db;

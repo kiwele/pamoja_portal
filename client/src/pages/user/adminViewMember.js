@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useParams } from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -15,14 +16,10 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { usermainListItems } from './userListItems';
-import AddProfilePicture from '../../Component/addProfilePicture';
-import ResetPassword from '../../Component/resetPassword';
 import ImageAvatars from '../../Component/avatarImg';
-import UserDatatable from '../../Component/userDatatable';
-import { NavLink } from 'react-router-dom';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import EnhancedTable from '../../Component/memberDataTable';
-import MemberDataTable from '../../Component/memberDataTable';
+import MemberAcademicProfile from '../../Component/MemberProfile/memberAcadeicProfile';
+import MemberWorkProfile from '../../Component/MemberProfile/memberWorkProfile';
+import MemberPersonalInfo from '../../Component/MemberProfile/memberPersonalInfo';
 
 
 const BASE_URL = process.env.BASE_URL;
@@ -89,10 +86,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
+  let { id } = useParams();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  console.log(id);
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -123,7 +122,7 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              Member informations
             </Typography>
             <ImageAvatars/>
           </Toolbar>
@@ -163,19 +162,17 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 
-            <MemberDataTable/>
-            {/* <Grid container spacing={3}>
-           
+          <Grid container spacing={3}>
               <Grid item xs={12}>
-
-              {/* <UserDatatable /> */}
-                  
-                  {/* <ResetPassword/>
-                  <AddProfilePicture/> */}
-                  
-              {/* </Grid> */}
-
-            {/* </Grid> */}
+                  <MemberPersonalInfo/>
+              </Grid>
+              <Grid item xs={12}>
+                  <MemberAcademicProfile/>
+              </Grid>
+              <Grid item xs={12}>
+                  <MemberWorkProfile/>
+              </Grid>
+            </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
@@ -184,6 +181,6 @@ function DashboardContent() {
   );
 }
 
-export default function UserDashboard() {
+export default function AdminViewMember() {
   return <DashboardContent />;
 }

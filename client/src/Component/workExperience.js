@@ -18,10 +18,21 @@ import { toast } from "react-toastify";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import Alert from "@mui/material/Alert";
+
+function refreshPage() {
+  window.location.reload();
+}
 
 const mdTheme = createTheme();
 
 function WorkExperience() {
+  const [showAlert, setShowAlert] = useState({
+    status: false,
+    severity: "",
+    message: "",
+  });
+
   const axiosPrivate = useAxiosPrivate();
 
   // const [file, setFile] = useState();
@@ -47,13 +58,31 @@ function WorkExperience() {
     axiosPrivate
       .post("/working_experience", formData)
       .then((e) => {
-        toast.success("updated successifully");
+             // set alert
+             setShowAlert({
+              ...showAlert,
+              status: true,
+              message: "experience added successifully",
+              severity: "success",
+            });
+            setTimeout(() => {
+              setShowAlert({ ...showAlert, status: false });
+              refreshPage();
+            }, 2000);
       })
       .catch((e) => {
-        toast.error("error");
+        setShowAlert({
+          ...showAlert,
+          status: true,
+          message: "something went wrong",
+          severity: "error",
+        });
+        setTimeout(() => {
+          setShowAlert({ ...showAlert, status: false });
+          refreshPage();
+        }, 2000);
       });
 
-    console.log(data);
   };
 
   return (
@@ -61,6 +90,9 @@ function WorkExperience() {
       <Grid container component="main" sx={{ height: "50vh" }}>
         <CssBaseline />
 
+        {showAlert.status && (
+        <Alert severity= {showAlert.severity}>{showAlert.message}</Alert>
+      )}
         <Grid
           item
           xs={12}
@@ -68,7 +100,6 @@ function WorkExperience() {
           // md={12}
           component={Paper}
           // elevation={6}
-          square
         >
           <Box
             sx={{
@@ -76,11 +107,11 @@ function WorkExperience() {
               mx: 4,
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
+              alignItems: "left",
             }}
           >
             <Typography component="h1" variant="h5">
-              Work Experience
+               Work Experience
             </Typography>
             <Box
               component="form"
@@ -118,21 +149,15 @@ function WorkExperience() {
                 onChange={(e) => setData({ ...data, positionTitle: e.target.value })}
               />
 
-
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker", "DatePicker"]}>
-                  {/* <DatePicker
-                    label="Uncontrolled picker"
-                    defaultValue={dayjs("2022-04-17")}
-                  /> */}
+                <DemoContainer components={["DatePicker"]}>
                   <DatePicker
-                    label="Controlled picker"
+                    label="Start date"
                     value={value}
                     onChange={(newValue) => setValue(newValue)}
                   />
                 </DemoContainer>
               </LocalizationProvider>
-              {/* <Input type="file" onChange={handleFileChange} /> */}
               <br />
               <Button
                 type="submit"

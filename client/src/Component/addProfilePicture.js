@@ -11,14 +11,24 @@ import { toast } from "react-toastify";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import Alert from "@mui/material/Alert";
 
 
 const mdTheme = createTheme();
+
+function  refreshPage(){
+  window.location.reload()
+}
 
 function RegisterBookContent() {
   const axiosPrivate = useAxiosPrivate();
 
   const [file, setFile] = useState();
+  const [showAlert, setShowAlert] = useState({
+    status: false,
+    severity: "",
+    message: "",
+  });
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -31,13 +41,34 @@ function RegisterBookContent() {
 
     formData.append("file", file);
 
-    axiosPrivate.post("http://localhost:4000/update_picture", formData, {
-      })
+    axiosPrivate.post("/update_picture", formData)
       .then((e) => {
-        toast.success("updated successifully");
+                // set alert
+                setShowAlert({
+                  ...showAlert,
+                  status: true,
+                  message: "picture updated successifully",
+                  severity: "success",
+                });
+                setTimeout(() => {
+                  setShowAlert({ ...showAlert, status: false });
+                  refreshPage();
+                }, 2000);
+
+      
       })
       .catch((e) => {
-        toast.error("error");
+             // set alert
+             setShowAlert({
+              ...showAlert,
+              status: true,
+              message: "something went wrong",
+              severity: "error",
+            });
+            setTimeout(() => {
+              setShowAlert({ ...showAlert, status: false });
+              refreshPage();
+            }, 2000);
       });
   };
 
@@ -45,6 +76,10 @@ function RegisterBookContent() {
     <ThemeProvider theme={mdTheme}>
       <Grid container component="main" sx={{ height: "50vh" }}>
         <CssBaseline />
+
+        {showAlert.status && (
+          <Alert severity= {showAlert.severity}>{showAlert.message}</Alert>
+        )}
 
         <Grid
           item

@@ -18,13 +18,23 @@ import { toast } from "react-toastify";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import Alert from "@mui/material/Alert";
+
+function refreshPage() {
+  window.location.reload();
+}
+
 
 const mdTheme = createTheme();
 
 function AcademicInfo() {
+  const [showAlert, setShowAlert] = useState({
+    status: false,
+    severity: "",
+    message: "",
+  });
   const axiosPrivate = useAxiosPrivate();
 
-  // const [file, setFile] = useState();
   const [data, setData] = useState({
     schoolName: "",
     program: "",
@@ -49,20 +59,39 @@ function AcademicInfo() {
     axiosPrivate
       .post("/academic_info", formData)
       .then((e) => {
-        toast.success("updated successifully");
+          // set alert
+          setShowAlert({
+            ...showAlert,
+            status: true,
+            message: "academic detail added successifully ",
+            severity: "success",
+          });
+          setTimeout(() => {
+            setShowAlert({ ...showAlert, status: false });
+            refreshPage();
+          }, 2000);
       })
       .catch((e) => {
-        toast.error("error");
+        setShowAlert({
+          ...showAlert,
+          status: true,
+          message: "something went wrong",
+          severity: "error",
+        });
+        setTimeout(() => {
+          setShowAlert({ ...showAlert, status: false });
+          refreshPage();
+        }, 2000);
       });
-
-    console.log(data);
   };
 
   return (
     <ThemeProvider theme={mdTheme}>
       <Grid container component="main" sx={{ height: "50vh" }}>
         <CssBaseline />
-
+        {showAlert.status && (
+        <Alert severity= {showAlert.severity}>{showAlert.message}</Alert>
+      )}
         <Grid
           item
           xs={12}
@@ -130,28 +159,6 @@ function AcademicInfo() {
                 value={data.award}
                 onChange={(e) => setData({ ...data, award: e.target.value })}
               />
-              <TextField
-                margin="normal"
-                required
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="text"
-                autoFocus
-                value={data.email}
-                onChange={(e) => setData({ ...data, email: e.target.value })}
-              />
-              <TextField
-                margin="normal"
-                required
-                id="phone"
-                label="Phone number"
-                name="phone"
-                autoComplete="number"
-                autoFocus
-                value={data.phone}
-                onChange={(e) => setData({ ...data, phone: e.target.value })}
-              />
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 {/* <DemoContainer components={["DatePicker", "DatePicker"]}> */}
@@ -160,7 +167,7 @@ function AcademicInfo() {
                     defaultValue={dayjs("2022-04-17")}
                   /> */}
                   <DatePicker
-                    label="Controlled picker"
+                    label="Start date"
                     value='20'
                     onChange={(newValue) => setValue(newValue)}
                   />

@@ -3,7 +3,7 @@ export default (sequelize, Sequelize) => {
     'schoolStudied',
     {
       schoolId: {
-        type: Sequelize.INTEGER(1),
+        type: Sequelize.INTEGER(3),
         autoIncrement: true,
         primaryKey: true,
       },

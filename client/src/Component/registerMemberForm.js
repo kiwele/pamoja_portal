@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { TextField } from "@material-ui/core";
-import axios from "axios";
 import { toast } from "react-toastify";
 import Button from "@mui/material/Button";
 import Radio from "@mui/material/Radio";
@@ -19,12 +18,17 @@ import FormLabel from "@mui/material/FormLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import Input from "@mui/material/Input";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import Alert from "@mui/material/Alert";
 
 const mdTheme = createTheme();
 
+function refreshPage() {
+  window.location.reload();
+}
+
 function Register() {
+  const [showAlert, setShowAlert] = useState({ status: false, severity : "", message : "" });
   const axiosPrivate = useAxiosPrivate();
 
   // const [file, setFile] = useState();
@@ -65,25 +69,38 @@ function Register() {
     formData.append("region", data.region);
     formData.append("gender", data.gender);
     formData.append("gender", selectedValue);
-    formData.append('marital_Status', MaritalStatus)
+    formData.append("marital_Status", MaritalStatus);
     // formData.append("file", file);
 
     axiosPrivate
       .post("/register_member", formData)
       .then((e) => {
-        toast.success("registereded successifully");
+        // set alert
+        setShowAlert({...showAlert, status: true, message: 'registered successifully', severity: 'success'});
+        setTimeout(() => {
+          setShowAlert({...showAlert, status: false});
+          refreshPage();
+        }, 2000);
+
       })
       .catch((e) => {
-        toast.error("error");
+        setShowAlert({...showAlert, status: true, message: 'something went wrong', severity: 'error'});
+        setTimeout(() => {
+          setShowAlert({...showAlert, status: false});
+          refreshPage();
+        }, 2000);
       });
 
-    console.log(data);
   };
 
   return (
     <ThemeProvider theme={mdTheme}>
       <Grid container component="main" sx={{ height: "50vh" }}>
         <CssBaseline />
+       
+        {showAlert.status && (
+        <Alert severity= {showAlert.severity}>{showAlert.message}</Alert>
+      )}
 
         <Grid
           item
@@ -162,7 +179,7 @@ function Register() {
                 onChange={(e) => setData({ ...data, email: e.target.value })}
               />
               <TextField
-               type="password"
+                type="password"
                 margin="normal"
                 required
                 id="password"
@@ -241,8 +258,7 @@ function Register() {
                   onChange={handleAgeChange}
                   label="Age"
                 >
-                  <MenuItem value="">
-                  </MenuItem>
+                  <MenuItem value=""></MenuItem>
                   <MenuItem value={1}>Single</MenuItem>
                   <MenuItem value={2}>Maried</MenuItem>
                   <MenuItem value={3}>Divorced</MenuItem>

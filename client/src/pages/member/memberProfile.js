@@ -16,7 +16,9 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { membermainListItems } from "../../Component/memberItemList";
-import Profile from "../../Component/profile";
+import Profile from "../../Component/profile/profile";
+import WorkProfile from "../../Component/profile/workProfile";
+import AcademicProfile from "../../Component/profile/acadeicProfile";
 import AddProfilePicture from "../../Component/addProfilePicture";
 import ResetPassword from "../../Component/resetPassword";
 import ImageAvatars from "../../Component/avatarImg";
@@ -164,14 +166,13 @@ function ProfileContent() {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                {/* <button onClick={ () => { */}
-
-                {/* //  console.log(options.selectedRows.text); */}
-                {/* }}> new check</button>           */}
-
-                {/* <UserDatatable /> */}
-                {/* <ResetPassword/> */}
                   <Profile/>
+              </Grid>
+              <Grid item xs={12}>
+                  <AcademicProfile/>
+              </Grid>
+              <Grid item xs={12}>
+                  <WorkProfile/>
               </Grid>
             </Grid>
             <Copyright sx={{ pt: 4 }} />

@@ -2,20 +2,19 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+
 import { toast } from "react-toastify";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
-export default function ImageAvatars() {
+export default function ImageAvatars({ height, width }) {
   const axiosPrivate = useAxiosPrivate();
- const [data, setData] = useState()
+  const [data, setData] = useState();
 
   useEffect(() => {
-    axiosPrivate
-    ("/picture"
-      )
+    axiosPrivate("/picture")
       .then((response) => {
-        setData(response.data.profile_picture)
+        setData(response.data.profile_picture);
         toast.success("updated successifully");
       })
       .catch((e) => {
@@ -23,11 +22,15 @@ export default function ImageAvatars() {
       });
   }, []);
 
-  console.log(data);
-
   return (
     <Stack direction="row" spacing={2}>
-      <Avatar alt="User" src={`//localhost:4000/uploads/${data}`} />
+      <Avatar
+        alt="User"
+        sx={{ height: height, width: width }}
+        src={`//localhost:4000/uploads/${data}`}
+      >
+        {/* <CameraAltOutlinedIcon/> */}
+      </Avatar>
     </Stack>
   );
 }

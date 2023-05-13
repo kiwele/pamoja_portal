@@ -158,14 +158,11 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+
+            <p>Admin view member</p>
             <Grid container spacing={3}>
            
               <Grid item xs={12}>  
-
-                 {/* <button onClick={ () => { */}
-        
-        {/* //  console.log(options.selectedRows.text); */}
-      {/* }}> new check</button>           */}
 
                   {/* <UserDatatable /> */}
                   <ResetPassword/>
