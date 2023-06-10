@@ -9,6 +9,8 @@ import work_experience from './models/work_experience.js';
 import maritalStatus from './models/maritalStatus.js';
 import activeStatus from './models/activeStatus.js';
 import userRole from './models/userRole.js';
+import project from './models/project.js';
+import level from './models/level.js';
 
 const sequelize = new Sequelize('Pamoja_portal', 'root', '', {
   host: 'localhost',
@@ -29,6 +31,8 @@ db.work_experience = work_experience(sequelize, Sequelize);
 db.maritalStatus = maritalStatus(sequelize, Sequelize);
 db.userRole = userRole(sequelize, Sequelize);
 db.activeStatus = activeStatus(sequelize, Sequelize);
+db.project = project(sequelize, Sequelize);
+db.level = level(sequelize, Sequelize);
 
 // making table relations
 
@@ -78,6 +82,22 @@ db.members.Member.hasMany(db.schoolstudied.SchoolStudied, {
 });
 db.schoolstudied.SchoolStudied.belongsTo(db.members.Member, {
   foreignKey: 'memberId',
+});
+
+// member and projects
+db.members.Member.hasMany(db.project.Projects, {
+  foreignKey: 'memberId',
+});
+db.project.Projects.belongsTo(db.members.Member, {
+  foreignKey: 'memberId',
+});
+
+// Level and memberId
+db.level.Level.hasMany(db.members.Member, {
+  foreignKey: 'levelId',
+});
+db.members.Member.belongsTo(db.level.Level, {
+  foreignKey: 'levelId',
 });
 
 export default db;

@@ -5,7 +5,7 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable camelcase */
 // import bcrypt from 'bcryptjs';
-// import { Op } from 'sequelize';
+import { Op } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
 import db from '../database.js';
@@ -18,6 +18,8 @@ const { WorkExperience } = db.work_experience;
 const { User } = db.user;
 const { MaritalStatus } = db.maritalStatus;
 const { ActiveStatus } = db.activeStatus;
+const { Projects } = db.project;
+const { Level } = db.level;
 
 // // get user image
 // const getUser = async (req, res) => {
@@ -33,19 +35,17 @@ const { ActiveStatus } = db.activeStatus;
 //   }
 // };
 
-// reset password
 const registerMember = async (req, res) => {
   try {
     const checkMember = await User.findOne({
       where: { email: req.body.email },
     });
     if (checkMember !== null) {
-      res.status(400).json({ message: 'user already exist' });
+      return res.status(400).json({ message: 'user already exist' });
     }
 
     if (checkMember === null) {
       bcrypt.hash(req.body.password, 10, async (err, hash) => {
-        console.log(req.body);
         const regInfo = {
           email: req.body.email,
           password: hash,
@@ -63,6 +63,8 @@ const registerMember = async (req, res) => {
           last_name: req.body.lname,
           email: req.body.email,
           phone_number: req.body.phone,
+          parentName: req.body.parentName,
+          parentPhone: req.body.parentPhone,
           maritalStatusId: req.body.marital_Status,
           gender: req.body.gender[1],
         };
@@ -73,12 +75,66 @@ const registerMember = async (req, res) => {
           region: req.body.region,
           memberId: memberAdded.dataValues.userId,
         });
-        console.log(req.body.password);
         await sendEMail(req.body.email, req.body.password);
 
-        res.status(204).json({
+        return res.status(204).json({
           message: 'member registered successifully',
         });
+      });
+    }
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+// update member
+const updateMember = async (req, res) => {
+  try {
+    console.log(req.body);
+    console.log(req.params);
+    const checkMember = await User.findOne({
+      where: { email: req.body.data.email },
+    });
+    if (checkMember === null) {
+      res.status(400).json({ message: 'user doest not exist' });
+    }
+
+    if (checkMember !== null) {
+      // update user in the User table
+      await User.update(
+        {
+          email: req.body.data.email,
+        },
+        {
+          where: { userId: req.params.id },
+        },
+      );
+
+      const memberInfo = {
+        first_name: req.body.data.fname,
+        middle_name: req.body.data.mname,
+        last_name: req.body.data.lname,
+        email: req.body.data.email,
+        phone_number: req.body.data.phone,
+        maritalStatusId: req.body.MaritalStatus,
+        gender: req.body.selectedValue,
+      };
+
+      await Member.update(memberInfo, {
+        where: { memberId: req.params.id },
+      });
+
+      await MemberLocation.update(
+        {
+          region: req.body.data.region,
+        },
+        {
+          where: { memberId: req.params.id },
+        },
+      );
+
+      res.status(204).json({
+        message: 'member updated  successifully',
       });
     }
   } catch (error) {
@@ -86,7 +142,7 @@ const registerMember = async (req, res) => {
   }
 };
 
-// academic informations
+// add academic informations
 const addAcademicInfo = async (req, res) => {
   // console.log(req.body);
   try {
@@ -100,6 +156,68 @@ const addAcademicInfo = async (req, res) => {
     });
     res.status(204).json({
       message: 'Academics added successifully',
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// add projects informations
+const addProject = async (req, res) => {
+  const { title, description } = req.body;
+
+  const data = {
+    title,
+    description,
+    file: req.file.filename,
+    memberId: req.userDetails.id,
+  };
+  console.log(req.file);
+  console.log(req.body);
+  try {
+    await Projects.create(data);
+    return res.status(200).json({
+      message: 'Project added successifully',
+    });
+  } catch (error) {
+    return res.status(500).json({ message: 'internal server error' });
+  }
+};
+
+const getProjects = async (req, res) => {
+  try {
+    const projectsInfo = await Projects.findAll({
+      where: { memberId: req.userDetails.id },
+      // attributes: ['projectId ', 'title', 'description', 'file'],
+    });
+
+    console.log(projectsInfo);
+
+    return res.status(200).json({ data: projectsInfo });
+  } catch (error) {
+    return res.status(500).json({ message: 'internal server error' });
+  }
+};
+// add academic informations
+const updateAcademics = async (req, res) => {
+  console.log(req.body);
+  try {
+    await SchoolStudied.update(
+      {
+        school_names: req.body.schoolName,
+        study_taken: req.body.program,
+        award: req.body.award,
+        start_date: req.body.startDate,
+        end_date: req.body.endDate,
+      },
+      {
+        where: {
+          schoolId: req.params.id,
+        },
+      },
+    );
+    res.status(204).json({
+      message: 'Academics updated successifully',
     });
   } catch (error) {
     console.log(error);
@@ -139,11 +257,12 @@ const getAllMembers = async (req, res) => {
         },
         {
           model: ActiveStatus,
-
+        },
+        {
+          model: Level,
         },
       ],
     });
-    console.log(members);
     res.status(200).json({ data: members });
   } catch (error) {
     throw error;
@@ -166,7 +285,6 @@ const personalInfo = async (req, res) => {
       ],
     });
 
-    console.log(userInfo);
     res.status(200).json({ data: userInfo });
   } catch (error) {
     console.log(error);
@@ -177,12 +295,18 @@ const getAcademicInfo = async (req, res) => {
   try {
     const academicInfo = await SchoolStudied.findAll({
       where: { memberId: req.userDetails.id },
-      attributes: ['school_names', 'study_taken', 'award'],
+      attributes: [
+        'school_names',
+        'study_taken',
+        'award',
+        'memberId',
+        'schoolId',
+      ],
     });
 
-    res.status(200).json({ data: academicInfo });
+    return res.status(200).json({ data: academicInfo });
   } catch (error) {
-    console.log(error);
+    return res.status(500).json({ message: 'internal server error' });
   }
 };
 
@@ -215,7 +339,6 @@ const adminViewMemberPersonalInfo = async (req, res) => {
       ],
     });
 
-    console.log(userInfo);
     res.status(200).json({ data: userInfo });
   } catch (error) {
     console.log(error);
@@ -262,10 +385,36 @@ const deleteMember = async (req, res) => {
   }
 };
 
+const manageMember = async (req, res) => {
+  const { Level, status } = req.body;
+  console.log(req.body);
+  try {
+    await Member.update({
+      levelId: Level,
+      activeId: status,
+    }, {
+      where: { memberId: req.params.memberId },
+    });
+
+    return res.status(200).json({ message: 'updated successifully' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const test = (req, res) => {
+  console.log('hapa tumefika');
+  // console.log(req.body);
+  res.status(200).json({ message: 'route reached' });
+};
+
 export {
+  test,
   registerMember,
+  updateMember,
   getAllMembers,
   addAcademicInfo,
+  updateAcademics,
   workingExperience,
   personalInfo,
   getAcademicInfo,
@@ -274,4 +423,7 @@ export {
   adminViewMemberAcademicInfo,
   adminViewMemberWorkInfo,
   deleteMember,
+  manageMember,
+  addProject,
+  getProjects,
 };

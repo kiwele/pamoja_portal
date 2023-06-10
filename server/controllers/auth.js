@@ -8,7 +8,6 @@ const { User } = db.user;
 
 // User registration
 const register = async (req, res) => {
-  console.log(req.body);
   // check for empty value
   const obj = req.body;
   function isEmpty(object) {
@@ -49,12 +48,11 @@ const register = async (req, res) => {
 // handle user login
 const userLogin = async (req, res) => {
   // check for the empty object
-  const obj = req.body;
   function isEmpty(object) {
     return Object.keys(object).length === 0;
   }
 
-  const emptyObj = isEmpty(obj);
+  const emptyObj = isEmpty(req.body);
   if (emptyObj === true || req.body.email === '') {
     res.status(400).json({ message: 'enter data to login' });
   } else {
@@ -65,7 +63,6 @@ const userLogin = async (req, res) => {
     if (userExist !== null) {
       // compare password with hash
       bcrypt.compare(req.body.password, userExist.password, async (err, result) => {
-        console.log(result);
         if (result === true) {
           const accessToken = Jwt.sign(
             {
@@ -125,7 +122,7 @@ const logout = async (req, res) => {
 };
 
 export {
-  userLogin,
   register,
+  userLogin,
   logout,
 };

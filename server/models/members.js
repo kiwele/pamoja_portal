@@ -27,6 +27,14 @@ export default (sequelize, Sequelize) => {
         type: Sequelize.INTEGER(15),
         required: true,
       },
+      parentName: {
+        type: Sequelize.STRING,
+        required: true,
+      },
+      parentPhone: {
+        type: Sequelize.INTEGER(15),
+        required: true,
+      },
       gender: {
         type: Sequelize.STRING,
         required: true,
