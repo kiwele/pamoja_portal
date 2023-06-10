@@ -58,12 +58,11 @@ export default function SignInSide() {
         console.log(response);
 
         if (response.status === 200 && response.data.user.role === 1) {
-        
           // setAlert(true);
           // setAlertContent(response.data.mesage);
           setAuth(response.data.user.accessToken);
 
-          navigate("/admin_dashboard")
+          navigate("/admin_dashboard");
         }
 
         if (response.status === 200 && response.data.user.role === 2) {

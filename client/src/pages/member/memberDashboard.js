@@ -18,12 +18,7 @@ import { membermainListItems } from '../../Component/memberItemList';
 import AddProfilePicture from '../../Component/addProfilePicture';
 import ResetPassword from '../../Component/resetPassword';
 import ImageAvatars from '../../Component/avatarImg';
-import UserDatatable from '../../Component/userDatatable';
-import { NavLink } from 'react-router-dom';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-
-const BASE_URL = process.env.BASE_URL;
 
 function Copyright(props) {
   return (
@@ -144,6 +139,8 @@ function DashboardContent() {
             {membermainListItems}          
           </List>
         </Drawer>
+
+
         <Box
           component="main"
           sx={{
@@ -156,17 +153,18 @@ function DashboardContent() {
             overflow: 'auto',
           }}
         >
+
+
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 
-            <p>Admin view member</p>
             <Grid container spacing={3}>
            
               <Grid item xs={12}>  
 
-                  {/* <UserDatatable /> */}
                   <ResetPassword/>
                   <AddProfilePicture/>
+              
                   
               </Grid>
 

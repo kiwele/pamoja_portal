@@ -12,11 +12,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Button from "@material-ui/core/Button";
-import AddIcon from '@mui/icons-material/Add';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import { makeStyles } from "@material-ui/core/styles";
 import AddWorkExperience from "../workExperience";
+import AddAchievements from "../AddAchievements";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,15 +49,12 @@ const theme = createTheme({
   },
 });
 
-
-export default function WorkProfile() {
-
+export default function Achievementsfile() {
   const [data, setData] = useState([]);
 
   const axiosPrivate = useAxiosPrivate();
   const classes = useStyles();
   const [showForm, setShowForm] = useState(false);
-
 
   const handleShowForm = () => {
     setShowForm(true);
@@ -67,15 +65,12 @@ export default function WorkProfile() {
   };
 
   useEffect(() => {
-    axiosPrivate("/get_working_info").then((e) => {
-
+    axiosPrivate("/projects").then((e) => {
+      console.log("hapa");
       console.log(e.data.data);
       setData(e.data.data);
-
-      // toast.success("updated successifully");
     });
   }, [showForm]);
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -87,10 +82,8 @@ export default function WorkProfile() {
           p: 5,
           minWidth: 300,
           spacing: 8,
-
         }}
       >
-
         <Box>
           <TableContainer component={Paper}>
             <Table
@@ -99,59 +92,61 @@ export default function WorkProfile() {
               aria-label="a dense table"
             >
               <TableHead>
-              <TableRow>
-                  <TableCell> WORKING EXPERIENCE</TableCell>
-            
+                <TableRow>
+                  <TableCell>PROJECTS ACHIEVED</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell> Organization</TableCell>
-                  <TableCell align="left">Positin Title</TableCell>
-                  <TableCell align="left">Time</TableCell>
+                  <TableCell>Project title</TableCell>
+                  <TableCell align="left">Short description</TableCell>
+                  <TableCell align="left">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data.map((row) => (
                   <TableRow
-                    key={row.organization}
+                    key={row.projectId}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.organization}
+                      {row.title}
                     </TableCell>
-                    <TableCell align="left">{row.position_title}</TableCell>
-                    <TableCell align="left">{row.start_date}</TableCell>
-              
-                    
+                    <TableCell align="left">{row.description}</TableCell>
+                    <TableCell align="left">view</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
           <Box>
-            <Box sx = {{
-              display: 'flex',
-              alignContent: 'left'
-            }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignContent: "left",
+              }}
+            >
               <Button
                 size="small"
                 // variant="contained"
                 color="primary"
                 onClick={handleShowForm}
               >
-                <AddIcon/>
+                <AddIcon />
               </Button>
             </Box>
 
             {showForm && (
               <Paper className={classes.paper}>
-                <div alignContent= "left">
-                <IconButton color="primary" aria-label="add to shopping cart" onClick={handleHideForm}>
-                      <CloseIcon/>
-                   </IconButton>
+                <div alignContent="left">
+                  <IconButton
+                    color="primary"
+                    aria-label="add to shopping cart"
+                    onClick={handleHideForm}
+                  >
+                    <CloseIcon />
+                  </IconButton>
                 </div>
-               
-               <AddWorkExperience handle = {handleHideForm}/>
-                
+
+                <AddAchievements handle={handleHideForm} />
               </Paper>
             )}
           </Box>

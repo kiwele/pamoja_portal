@@ -19,6 +19,7 @@ import { membermainListItems } from "../../Component/memberItemList";
 import Profile from "../../Component/profile/profile";
 import WorkProfile from "../../Component/profile/workProfile";
 import AcademicProfile from "../../Component/profile/acadeicProfile";
+import Achievementsfile from "../../Component/profile/achievementsProfile";
 import AddProfilePicture from "../../Component/addProfilePicture";
 import ResetPassword from "../../Component/resetPassword";
 import ImageAvatars from "../../Component/avatarImg";
@@ -173,6 +174,9 @@ function ProfileContent() {
               </Grid>
               <Grid item xs={12}>
                   <WorkProfile/>
+              </Grid>
+              <Grid item xs={12}>
+                  <Achievementsfile/>
               </Grid>
             </Grid>
             <Copyright sx={{ pt: 4 }} />

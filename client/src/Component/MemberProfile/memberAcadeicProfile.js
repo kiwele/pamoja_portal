@@ -60,22 +60,12 @@ export default function MemberAcademicProfile() {
   useEffect(() => {
     axiosPrivate(`/get_member_academic_info/${id}`).then((e) => {
       setData(e.data.data);
-
-      // toast.success("updated successifully");
     });
   }, []);
 
   // handle form show and hiding
   const classes = useStyles();
-  const [showForm, setShowForm] = useState(false);
 
-  const handleShowForm = () => {
-    setShowForm(true);
-  };
-
-  const handleHideForm = () => {
-    setShowForm(false);
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -83,8 +73,8 @@ export default function MemberAcademicProfile() {
         sx={{
           bgcolor: "background.paper",
           boxShadow: 1,
-          borderRadius: 2,
           p: 5,
+          borderRadius: 2,
           minWidth: 300,
           spacing: 8,
         }}

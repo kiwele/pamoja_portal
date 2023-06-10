@@ -27,7 +27,7 @@ function refreshPage() {
 
 const mdTheme = createTheme();
 
-function AcademicInfo() {
+function AcademicInfo({handle}) {
   const [showAlert, setShowAlert] = useState({
     status: false,
     severity: "",
@@ -44,6 +44,9 @@ function AcademicInfo() {
   });
   const [value, setValue] = useState(dayjs('2022-04-17'));
 
+  const handleFicha = () => {
+    handle();
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -68,7 +71,7 @@ function AcademicInfo() {
           });
           setTimeout(() => {
             setShowAlert({ ...showAlert, status: false });
-            refreshPage();
+            handleFicha()
           }, 2000);
       })
       .catch((e) => {
@@ -80,7 +83,7 @@ function AcademicInfo() {
         });
         setTimeout(() => {
           setShowAlert({ ...showAlert, status: false });
-          refreshPage();
+          // refreshPage();
         }, 2000);
       });
   };
@@ -161,25 +164,19 @@ function AcademicInfo() {
               />
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                {/* <DemoContainer components={["DatePicker", "DatePicker"]}> */}
-                  {/* <DatePicker
-                    label="Uncontrolled picker"
-                    defaultValue={dayjs("2022-04-17")}
-                  /> */}
                   <DatePicker
                     label="Start date"
                     value='20'
                     onChange={(newValue) => setValue(newValue)}
                   />
-                {/* </DemoContainer> */}
               </LocalizationProvider>
-              {/* <Input type="file" onChange={handleFileChange} /> */}
               <br />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 4 }}
+              
               >
                 Save
               </Button>
@@ -191,6 +188,6 @@ function AcademicInfo() {
   );
 }
 
-export default function AddAcademicInfo() {
-  return <AcademicInfo />;
+export default function AddAcademicInfo({ handle }) {
+  return <AcademicInfo handle={handle} />;
 }

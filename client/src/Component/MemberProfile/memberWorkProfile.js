@@ -1,9 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
-import { Box, ThemeProvider, Typography, createTheme } from "@mui/material";
-import ImageAvatars from "../avatarImg";
-import { blue } from "@mui/material/colors";
+import { useParams } from "react-router-dom";
+import { Box, ThemeProvider, createTheme } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,12 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import Button from "@material-ui/core/Button";
-import AddIcon from '@mui/icons-material/Add';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from "@material-ui/core/styles";
-import AddWorkExperience from "../workExperience";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,35 +42,19 @@ const theme = createTheme({
   },
 });
 
-
 export default function MemberWorkProfile() {
-
   const [data, setData] = useState([]);
- 
-  let {id} = useParams()
+
+  let { id } = useParams();
   const axiosPrivate = useAxiosPrivate();
   const classes = useStyles();
   const [showForm, setShowForm] = useState(false);
 
-
-  const handleShowForm = () => {
-    setShowForm(true);
-  };
-
-  const handleHideForm = () => {
-    setShowForm(false);
-  };
-
   useEffect(() => {
     axiosPrivate(`/get_member_working_info/${id}`).then((e) => {
-
-      console.log(e.data.data);
       setData(e.data.data);
-
-      // toast.success("updated successifully");
     });
   }, []);
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -89,10 +66,8 @@ export default function MemberWorkProfile() {
           p: 5,
           minWidth: 300,
           spacing: 8,
-
         }}
       >
-
         <Box>
           <TableContainer component={Paper}>
             <Table
@@ -101,9 +76,8 @@ export default function MemberWorkProfile() {
               aria-label="a dense table"
             >
               <TableHead>
-              <TableRow>
+                <TableRow>
                   <TableCell> WORKING EXPERIENCE</TableCell>
-            
                 </TableRow>
                 <TableRow>
                   <TableCell> Organization</TableCell>
@@ -122,41 +96,11 @@ export default function MemberWorkProfile() {
                     </TableCell>
                     <TableCell align="left">{row.position_title}</TableCell>
                     <TableCell align="left">{row.start_date}</TableCell>
-              
-                    
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-          {/* <Box>
-            <Box sx = {{
-              display: 'flex',
-              alignContent: 'left'
-            }}>
-              <Button
-                size="small"
-                // variant="contained"
-                color="primary"
-                onClick={handleShowForm}
-              >
-                <AddIcon/>
-              </Button>
-            </Box>
-
-            {showForm && (
-              <Paper className={classes.paper}>
-                <div alignContent= "left">
-                <IconButton color="primary" aria-label="add to shopping cart" onClick={handleHideForm}>
-                      <CloseIcon/>
-                   </IconButton>
-                </div>
-               
-               <AddWorkExperience/>
-                
-              </Paper>
-            )}
-          </Box> */}
         </Box>
       </Box>
     </ThemeProvider>

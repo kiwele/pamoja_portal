@@ -1,6 +1,12 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Box, ThemeProvider, Typography, colors, createTheme } from "@mui/material";
+import {
+  Box,
+  ThemeProvider,
+  Typography,
+  colors,
+  createTheme,
+} from "@mui/material";
 import ImageAvatars from "../avatarImg";
 import { blue, red } from "@mui/material/colors";
 import Table from "@mui/material/Table";
@@ -9,8 +15,25 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import EditPersonalInfo from "./editProfile/editPersonalInfo";
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: theme.spacing(2),
+  },
+}));
 
 const theme = createTheme({
   palette: {
@@ -36,27 +59,37 @@ function createData(name, info) {
 
 export default function Profile() {
   const [data, setData] = useState({});
-
   const axiosPrivate = useAxiosPrivate();
 
+  // // handle form show and hiding
+  const classes = useStyles();
+  const [showForm, setShowForm] = useState(false);
+
+  const handleShowForm = () => {
+    setShowForm(true);
+  };
+
+  const handleHideForm = () => {
+    setShowForm(false);
+  };
+
   useEffect(() => {
-    axiosPrivate("/personal_info").then( async(e) => {
-     await setData(e.data.data);
-      console.log(e.data.data);
+    axiosPrivate("/personal_info").then(async (e) => {
+      await setData(e.data.data);
       // toast.success("updated successifully");
     });
-  }, []);
+  }, [showForm]);
 
-  const fullName = data.first_name + " " + data.last_name;
+  const fullName = data?.first_name + " " + data?.last_name;
   // let marital = data.maritalStatus.status_name;
-  // console.log("huu ujinga" +data.maritalStatus.status_name);
   const rows = [
     createData("Full name", fullName),
     createData("Email", data.email),
     createData("Phone number", data.phone_number),
     createData("Gender", data.gender),
-    createData("Marital status", "Single"),
-    createData("Curent Region", "Dar es salaam"),
+    createData("Marital status", data.maritalStatus?.status_name),
+    createData("Curent Region", data && data.memberLocations && data.memberLocations[0] && data.memberLocations[0].region
+    ),
   ];
 
   return (
@@ -90,7 +123,7 @@ export default function Profile() {
           <Typography>{data.first_name + " " + data.last_name}</Typography>
         </Box>
 
-        <box>
+        <Box>
           <TableContainer component={Paper}>
             <Table
               sx={{ minWidth: 650 }}
@@ -118,7 +151,36 @@ export default function Profile() {
               </TableBody>
             </Table>
           </TableContainer>
-        </box>
+
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignContent: "left",
+              }}
+            >
+              <IconButton aria-label="edit" onClick={handleShowForm}>
+                <EditIcon />
+              </IconButton>
+            </Box>
+
+            {showForm && (
+              <Paper className={classes.paper}>
+                <div alignContent="left">
+                  <IconButton
+                    color="primary"
+                    aria-label="add to shopping cart"
+                    onClick={handleHideForm}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </div>
+
+                <EditPersonalInfo showStatus={showForm} inputData={data} handle ={handleHideForm} />
+              </Paper>
+            )}
+          </Box>
+        </Box>
       </Box>
     </ThemeProvider>
   );

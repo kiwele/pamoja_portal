@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { TextField } from "@material-ui/core";
-import { toast } from "react-toastify";
 import Button from "@mui/material/Button";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -23,10 +22,6 @@ import Alert from "@mui/material/Alert";
 
 const mdTheme = createTheme();
 
-function refreshPage() {
-  window.location.reload();
-}
-
 function Register() {
   const [showAlert, setShowAlert] = useState({ status: false, severity : "", message : "" });
   const axiosPrivate = useAxiosPrivate();
@@ -40,12 +35,13 @@ function Register() {
     password: "",
     phone: "",
     region: "",
-    activity: "",
+    parentName: "",
+    parentPhone: "",
     gender: "",
   });
 
-  const [selectedValue, setSelectedValue] = React.useState({ gender: "" });
-  const [MaritalStatus, setMaritalStatus] = React.useState("");
+  const [selectedValue, setSelectedValue] = useState({ gender: "" });
+  const [MaritalStatus, setMaritalStatus] = useState("");
 
   const handleAgeChange = (event) => {
     setMaritalStatus(event.target.value);
@@ -67,10 +63,11 @@ function Register() {
     formData.append("password", data.password);
     formData.append("phone", data.phone);
     formData.append("region", data.region);
+    formData.append("parentName", data.parentName);
+    formData.append("parentPhone", data.parentPhone);
     formData.append("gender", data.gender);
     formData.append("gender", selectedValue);
     formData.append("marital_Status", MaritalStatus);
-    // formData.append("file", file);
 
     axiosPrivate
       .post("/register_member", formData)
@@ -79,15 +76,29 @@ function Register() {
         setShowAlert({...showAlert, status: true, message: 'registered successifully', severity: 'success'});
         setTimeout(() => {
           setShowAlert({...showAlert, status: false});
-          refreshPage();
         }, 2000);
+
+      // Reset form fields
+      setData({
+        fname: "",
+        lname: "",
+        mname: "",
+        email: "",
+        password: "",
+        phone: "",
+        region: "",
+        parentName: "",
+        parentPhone: "",
+        gender: "",
+      });
+      setSelectedValue({ gender: "" });
+      setMaritalStatus("");
 
       })
       .catch((e) => {
         setShowAlert({...showAlert, status: true, message: 'something went wrong', severity: 'error'});
         setTimeout(() => {
           setShowAlert({...showAlert, status: false});
-          refreshPage();
         }, 2000);
       });
 
@@ -211,17 +222,7 @@ function Register() {
                 value={data.region}
                 onChange={(e) => setData({ ...data, region: e.target.value })}
               />
-              <TextField
-                margin="normal"
-                required
-                id="activity"
-                label="activity"
-                name="activity"
-                autoComplete="text"
-                autoFocus
-                value={data.activity}
-                onChange={(e) => setData({ ...data, activity: e.target.value })}
-              />
+              
 
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
@@ -265,7 +266,29 @@ function Register() {
                 </Select>
               </FormControl>
 
-              {/* <Input type="file" onChange={handleFileChange} /> */}
+              <TextField
+                margin="normal"
+                required
+                id="parentName"
+                label="Parent Name"
+                name="parentName"
+                autoComplete="text"
+                autoFocus
+                value={data.parentName}
+                onChange={(e) => setData({ ...data, parentName: e.target.value })}
+              />
+               <TextField
+                margin="normal"
+                required
+                id="parentPhone"
+                label="Parent phone"
+                name="parentPhone"
+                autoComplete="text"
+                autoFocus
+                value={data.parentPhone}
+                onChange={(e) => setData({ ...data, parentPhone: e.target.value })}
+              />
+
               <br />
               <Button
                 type="submit"

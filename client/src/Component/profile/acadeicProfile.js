@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Box, ThemeProvider, Typography, createTheme } from "@mui/material";
-import ImageAvatars from "../avatarImg";
+import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,12 +12,12 @@ import Paper from "@mui/material/Paper";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import AddIcon from '@mui/icons-material/Add';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import EditAcademics from "./editProfile/editAcademics";
 import AddAcademicInfo from "../addAcademicInfo";
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,20 +51,21 @@ const theme = createTheme({
 
 export default function AcademicProfile() {
   const [data, setData] = useState([]);
-
+  const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [rowData, setRowData] = useState({});
+  
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     axiosPrivate("/get_academic_info").then((e) => {
       setData(e.data.data);
-
-      // toast.success("updated successifully");
     });
-  }, []);
-
+  }, [showForm, showEditForm]);
+  // showForm
   // handle form show and hiding
   const classes = useStyles();
-  const [showForm, setShowForm] = useState(false);
+ 
 
   const handleShowForm = () => {
     setShowForm(true);
@@ -73,6 +73,16 @@ export default function AcademicProfile() {
 
   const handleHideForm = () => {
     setShowForm(false);
+  };
+
+  const handleShowEditForm = (r) => {
+    console.log(r);
+    setRowData(r);
+    setShowEditForm(true);
+  };
+
+  const handleHideEditForm = () => {
+    setShowEditForm(false);
   };
 
   return (
@@ -103,12 +113,13 @@ export default function AcademicProfile() {
                   {/* <TableCell align="right">School name</TableCell> */}
                   <TableCell align="left">Program</TableCell>
                   <TableCell align="left">award</TableCell>
+                  <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data.map((row) => (
                   <TableRow
-                    key={row.school_names}
+                    key={row.schoolId}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -116,6 +127,15 @@ export default function AcademicProfile() {
                     </TableCell>
                     <TableCell align="left">{row.study_taken}</TableCell>
                     <TableCell align="left">{row.award}</TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        aria-label="edit"
+                        size="small"
+                        onClick={() => handleShowEditForm(row)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -123,30 +143,51 @@ export default function AcademicProfile() {
           </TableContainer>
 
           <Box>
-            <Box sx = {{
-              display: 'flex',
-              alignContent: 'left'
-            }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignContent: "left",
+              }}
+            >
               <Button
                 size="small"
                 // variant="contained"
                 color="primary"
                 onClick={handleShowForm}
               >
-                <AddIcon/>
+                <AddIcon />
               </Button>
             </Box>
 
             {showForm && (
               <Paper className={classes.paper}>
-                <div alignContent= "left">
-                <IconButton color="primary" aria-label="add to shopping cart" onClick={handleHideForm}>
-                      <CloseIcon/>
-                   </IconButton>
+                <div alignContent="left">
+                  <IconButton
+                    color="primary"
+                    aria-label="add to shopping cart"
+                    size="small"
+                    onClick={handleHideForm}
+                  >
+                    <CloseIcon />
+                  </IconButton>
                 </div>
-               
-               <AddAcademicInfo/>
-                
+
+                <AddAcademicInfo handle = {handleHideForm}/>
+              </Paper>
+            )}
+            {showEditForm && (
+              <Paper className={classes.paper}>
+                <div alignContent="left">
+                  <IconButton
+                    color="primary"
+                    aria-label="add to shopping cart"
+                    size="small"
+                    onClick={handleHideEditForm}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </div>
+                <EditAcademics inputData={rowData} handle ={handleHideEditForm}/>
               </Paper>
             )}
           </Box>

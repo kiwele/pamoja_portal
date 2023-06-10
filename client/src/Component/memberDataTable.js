@@ -29,8 +29,13 @@ export default function DataTable() {
       setTimeout(() => 
       {
       setShowAlert(false);
-      refreshPage()      
+      // refreshPage()      
       }, 2000);
+
+      setData((prevData) =>
+      prevData.filter((row) => row.id !== id)
+    );
+
       // toast.success("updated successifully");
     });
   }
@@ -55,6 +60,11 @@ export default function DataTable() {
       headerName: "Status",
       width: 90,
     },
+    {
+      field: "Level",
+      headerName: "Level",
+      width: 120,
+    },
     // {
     //   field: 'fullName',
     //   headerName: 'Full name',
@@ -70,10 +80,19 @@ export default function DataTable() {
       type: "actions",
       width: 200,
       renderCell: (params) => (
-        // <MemberActions/>
         <>
-          <a style={{ color: 'primary', backgroundColor: red }} href={`/member/${params.row.id}`}>view</a>
-          <Button onClick={ () => deleteMember(params.row.id)}>delete</Button>
+          <Tooltip title ="view member">
+          <Link to={`/member/${params.row.id}`}>
+          <IconButton style={{ width: '32px', height: '32px', color: 'green'}} onClick={() => {}}>
+            <PreviewIcon/>
+          </IconButton>
+          </Link>
+        </Tooltip>
+          <Tooltip title ="delete member">
+          <IconButton  style={{ width: '32px', height: '32px', color: 'red' }} onClick={() => deleteMember(params.row.id)}>
+            <DeleteOutlineOutlinedIcon/>
+          </IconButton>
+        </Tooltip>
         </>
       ),
       sortable: false,
@@ -85,6 +104,7 @@ export default function DataTable() {
   useEffect(() => {
     axiosPrivate("/members").then((e) => {
       let dd = e.data.data;
+      console.log(dd);
       const neswData = dd.map((dt) => ({
         id: dt.memberId,
         name: dt.first_name + " " + dt.last_name,
@@ -92,10 +112,10 @@ export default function DataTable() {
         phone: dt.phone_number,
         school: "Kichangachui",
         status: dt.activeStatus ? dt.activeStatus.status_name : "",
+        Level: dt.level? dt.level.level_name : "",
       }));
       console.log(dd);
       setData(neswData);
-      // toast.success("updated successifully");
     });
   }, []);
 
@@ -104,7 +124,9 @@ export default function DataTable() {
         {showAlert && (
         <Alert severity="success">User deleted successfully</Alert>
       )}
-      <Box>
+      <Box sx = {{
+         display: 'flex',
+      }}>
         <Button>
           <NavLink
             className="navbar-item"

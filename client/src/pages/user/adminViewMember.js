@@ -20,6 +20,7 @@ import ImageAvatars from '../../Component/avatarImg';
 import MemberAcademicProfile from '../../Component/MemberProfile/memberAcadeicProfile';
 import MemberWorkProfile from '../../Component/MemberProfile/memberWorkProfile';
 import MemberPersonalInfo from '../../Component/MemberProfile/memberPersonalInfo';
+import ManageMember from '../../Component/admin/manageMember.js';
 
 
 const BASE_URL = process.env.BASE_URL;
@@ -171,6 +172,9 @@ function DashboardContent() {
               </Grid>
               <Grid item xs={12}>
                   <MemberWorkProfile/>
+              </Grid>
+              <Grid item xs={12}>
+                 <ManageMember/>
               </Grid>
             </Grid>
             <Copyright sx={{ pt: 4 }} />

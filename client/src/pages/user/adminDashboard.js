@@ -164,13 +164,12 @@ function DashboardContent() {
            
               <Grid item xs={12}>  
 
-                 {/* <button onClick={ () => { */}
-        
-        {/* //  console.log(options.selectedRows.text); */}
-      {/* }}> new check</button>           */}
-
-                  {/* <UserDatatable /> */}
                   <ResetPassword/>
+                  
+              </Grid>
+              
+              <Grid item xs={12}>  
+
                   <AddProfilePicture/>
                   
               </Grid>

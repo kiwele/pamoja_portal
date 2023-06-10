@@ -8,25 +8,14 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { TextField } from "@material-ui/core";
-import dayjs from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import axios from "axios";
-import { toast } from "react-toastify";
 import Button from "@mui/material/Button";
-import Input from "@mui/material/Input";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Alert from "@mui/material/Alert";
 
-function refreshPage() {
-  window.location.reload();
-}
 
 const mdTheme = createTheme();
 
-function WorkExperience({ handle }) {
+export default function AddAchievements({ handle }) {
   const [showAlert, setShowAlert] = useState({
     status: false,
     severity: "",
@@ -35,34 +24,34 @@ function WorkExperience({ handle }) {
 
   const axiosPrivate = useAxiosPrivate();
 
-  // const [file, setFile] = useState();
+  const [file, setFile] = useState();
   const [data, setData] = useState({
-    organization: "",
-    positionTitle: "",
-    startDate: "",
-    endDate: "",
+    title: "",
+    description: "",
   });
-  const [value, setValue] = useState(dayjs('2022-04-17'));
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
 
-    formData.append("organization", data.organization);
-    formData.append("positionTitle", data.positionTitle);
-    formData.append("startDate", data.startDate);
-    formData.append("endDate", data.endDate);
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("file", file);
     // formData.append("file", file);
 
     axiosPrivate
-      .post("/working_experience", formData)
+      .post("/add_projects", formData)
       .then((e) => {
              // set alert
              setShowAlert({
               ...showAlert,
               status: true,
-              message: "experience added successifully",
+              message: "project added successifully",
               severity: "success",
             });
             setTimeout(() => {
@@ -82,7 +71,6 @@ function WorkExperience({ handle }) {
           handle();
         }, 2000);
       });
-
   };
 
   return (
@@ -96,10 +84,7 @@ function WorkExperience({ handle }) {
         <Grid
           item
           xs={12}
-          // sm={8}
-          // md={12}
           component={Paper}
-          // elevation={6}
         >
           <Box
             sx={{
@@ -111,7 +96,7 @@ function WorkExperience({ handle }) {
             }}
           >
             <Typography component="h1" variant="h5">
-               Work Experience
+               Achievements
             </Typography>
             <Box
               component="form"
@@ -125,39 +110,29 @@ function WorkExperience({ handle }) {
               <TextField
                 margin="normal"
                 required
-                fullWidth
-                id="organization"
-                label="organization"
-                name="organization"
+                id="title"
+                label="Title"
+                name="title"
                 autoComplete="text"
                 autoFocus
-                value={data.organization}
+                value={data.title}
                 onChange={(e) =>
-                  setData({ ...data, organization: e.target.value })
+                  setData({ ...data, title: e.target.value })
                 }
               />
               <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="positionTitle"
-                label="positionTitle"
-                name="positionTitle"
+                id="filled-multiline-flexible"
+                label="Description"
+                multiline
+                maxRows={50}
+                variant="filled"
+                name="Description"
                 autoComplete="text"
                 autoFocus
-                value={data.positionTitle}
-                onChange={(e) => setData({ ...data, positionTitle: e.target.value })}
+                value={data.description}
+                onChange={(e) => setData({ ...data, description: e.target.value })}
               />
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    label="Start date"
-                    value={value}
-                    onChange={(newValue) => setValue(newValue)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
+              <input type="file" onChange={handleFileChange}/>
               <br />
               <Button
                 type="submit"
@@ -173,8 +148,4 @@ function WorkExperience({ handle }) {
       </Grid>
     </ThemeProvider>
   );
-}
-
-export default function AddWorkExperience({ handle }) {
-  return <WorkExperience handle={handle}/>;
 }

@@ -1,7 +1,13 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
-import { Box, ThemeProvider, Typography, colors, createTheme } from "@mui/material";
+import { useParams } from "react-router-dom";
+import {
+  Box,
+  ThemeProvider,
+  Typography,
+  colors,
+  createTheme,
+} from "@mui/material";
 import ImageAvatars from "../avatarImg";
 import { blue, red } from "@mui/material/colors";
 import Table from "@mui/material/Table";
@@ -10,6 +16,8 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 import Paper from "@mui/material/Paper";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
@@ -42,8 +50,8 @@ export default function MemberPersonalInfo() {
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    axiosPrivate(`/get_member_personal_info/${id}`).then( async(e) => {
-     setData(e.data.data);
+    axiosPrivate(`/get_member_personal_info/${id}`).then(async (e) => {
+      setData(e.data.data);
       // toast.success("updated successifully");
     });
   }, []);
@@ -71,6 +79,9 @@ export default function MemberPersonalInfo() {
           spacing: 8,
         }}
       >
+               <IconButton aria-label="edit">
+            <EditIcon />
+          </IconButton>
         <Box
           sx={{
             display: "flex",
@@ -90,7 +101,7 @@ export default function MemberPersonalInfo() {
           <Typography>{data.first_name + " " + data.last_name}</Typography>
         </Box>
 
-        <box>
+        <Box>
           <TableContainer component={Paper}>
             <Table
               sx={{ minWidth: 650 }}
@@ -118,7 +129,9 @@ export default function MemberPersonalInfo() {
               </TableBody>
             </Table>
           </TableContainer>
-        </box>
+      
+        </Box>
+ 
       </Box>
     </ThemeProvider>
   );

@@ -162,39 +162,10 @@ function RegisterMembers() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-
             <Box sx={12}>
-            <RegisterMemberForm />
+              <RegisterMemberForm />
             </Box>
-            
-            {/* <Grid
-              container
-              // direction="column"
-              spacing={13}
-              justify="flex-end"
-              alignItems="flex-end"
-            >
-              <Grid item sx={12}>
-                <RegisterMemberForm />
-              </Grid>
-              {/* <Grid item xs={12}>
-                <AddAcademicInfo />
-              </Grid>
-              <Grid item xs={12}>
-                <AddWorkExperience />
-              </Grid> */}
-            {/* </Grid> */} 
-           
           </Container>
-          {/* <Box 
-          sx={{
-            pt: 4,
-            minWidth: 300,
-          }}>
-
-          <Copyright sx={{ pt: 4 }} />
-          </Box> */}
-          
         </Box>
       </Box>
     </ThemeProvider>
