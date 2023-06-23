@@ -5,11 +5,17 @@ import ListItemText from "@mui/material/ListItemText";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PeopleIcon from "@mui/icons-material/People";
 import HomeIcon from "@mui/icons-material/Home";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
+import { styled } from "@mui/system";
+
+const SidebarContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const usermainListItems = (
   <React.Fragment>
+    <SidebarContainer>
     <ListItemButton>
       <Link
         to="/admin_dashboard"
@@ -39,5 +45,6 @@ export const usermainListItems = (
         <ListItemText primary="Logout" />
       </Link>
     </ListItemButton>
+    </SidebarContainer>
   </React.Fragment>
 );

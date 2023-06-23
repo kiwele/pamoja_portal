@@ -164,18 +164,6 @@ function DashboardContent() {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 
             <MemberDataTable/>
-            {/* <Grid container spacing={3}>
-           
-              <Grid item xs={12}>
-
-              {/* <UserDatatable /> */}
-                  
-                  {/* <ResetPassword/>
-                  <AddProfilePicture/> */}
-                  
-              {/* </Grid> */}
-
-            {/* </Grid> */}
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>

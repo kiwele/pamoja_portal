@@ -79,9 +79,7 @@ export default function MemberPersonalInfo() {
           spacing: 8,
         }}
       >
-               <IconButton aria-label="edit">
-            <EditIcon />
-          </IconButton>
+         
         <Box
           sx={{
             display: "flex",
@@ -104,7 +102,7 @@ export default function MemberPersonalInfo() {
         <Box>
           <TableContainer component={Paper}>
             <Table
-              sx={{ minWidth: 650 }}
+              sx={{ minWidth: 200 }}
               size="small"
               aria-label="a dense table"
             >

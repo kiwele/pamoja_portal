@@ -145,7 +145,6 @@ function DashboardContent() {
           <List component="nav">
             {usermainListItems}
             <Divider sx={{ my: 1 }} />
-            {/* {secondaryListItems} */}
           </List>
         </Drawer>
         <Box

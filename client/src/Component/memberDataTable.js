@@ -10,7 +10,8 @@ import Alert from '@mui/material/Alert';
 import PreviewIcon from '@mui/icons-material/Preview';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { red } from "@mui/material/colors";
-import MemberActions from "./Actions/memberActions";
+import { useTheme } from '@mui/material/styles';
+import { useMediaQuery } from '@mui/material';
 
 function refreshPage() {
   window.location.reload();
@@ -19,6 +20,9 @@ function refreshPage() {
 
 
 export default function DataTable() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [showAlert, setShowAlert] = useState(false);
   const [data, setData] = useState();
   const axiosPrivate = useAxiosPrivate();
@@ -41,7 +45,7 @@ export default function DataTable() {
   }
   
   const columns = [
-    { field: "id", headerName: "ID", width: 70, hide: true },
+    { field: "id", headerName: "ID", width: 70, hide: false },
     { field: "name", headerName: "Full name", width: 160 },
     { field: "email", headerName: "Email", width: 160 },
     {
@@ -120,7 +124,7 @@ export default function DataTable() {
   }, []);
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 500, width: "100%" }}>
         {showAlert && (
         <Alert severity="success">User deleted successfully</Alert>
       )}
@@ -142,7 +146,20 @@ export default function DataTable() {
           rows={data}
           columns={columns}
           paginationModel={{ page: 0, pageSize: 5 }}
-          // checkboxSelection
+          checkboxSelection
+          autoHeight  // Enable auto height adjustment
+          disableColumnMenu  // Disable column menu for better responsiveness
+          disableColumnSelector  // Disable column selector for better responsiveness
+          disableDensitySelector  // Disable density selector for better responsiveness
+          disableExtendRowFullWidth  // Disable extending rows to full width for better responsiveness
+          disableSelectionOnClick  // Disable selection on cell click for better responsiveness
+          disableColumnFilter  // Disable column filter for better responsiveness
+          hideFooter  // Hide footer to improve responsiveness
+          disableColumnReorder  // Disable column reordering for better responsiveness
+          rowHeight={isSmallScreen ? 48 : 56}  // Adjust row height for small screens
+          headerHeight={isSmallScreen ? 48 : 56}  // Adjust header height for small screens
+          pageSize={isSmallScreen ? 5 : 10}  // Adjust page size for small screens
+          rowsPerPageOptions={isSmallScreen ? [5, 10, 20] : [10, 20, 50]}  // Adjust rows per page options for small screens
         />
       ) : (
         <p>data loading ....</p>

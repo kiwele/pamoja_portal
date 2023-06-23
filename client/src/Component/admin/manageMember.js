@@ -63,13 +63,17 @@ function ManageMember() {
           boxShadow: 1,
           borderRadius: 2,
           p: 5,
-          minWidth: 300,
+          minWidth: 200,
           spacing: 8,
+          '@media screen and (max-width: 600px)': {
+            minWidth: '100%',
+            p: 3,
+          },
         }}
       >
         <Typography>Manage Member</Typography>
 
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+        <FormControl variant="standard" sx={{ m: 1, ml: 3, minWidth: 120 }}>
           <InputLabel id="demo-simple-select-standard-label">Level</InputLabel>
           <Select
             labelId="demo-simple-select-standard-label"

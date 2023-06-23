@@ -8,10 +8,16 @@ import HomeIcon from '@mui/icons-material/Home';
 import { Link } from "react-router-dom";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { styled } from "@mui/system";
+
+const SidebarContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const membermainListItems = (
   <React.Fragment>
-
+ <SidebarContainer>
   <ListItemButton>
   <Link to="/member_dashboard" style={{ display: 'flex', alignItems: 'center' }}>
     <ListItemIcon>
@@ -40,6 +46,6 @@ export const membermainListItems = (
     <ListItemText primary="Logout" />
   </Link>
 </ListItemButton>
-
+</SidebarContainer>
   </React.Fragment>
 );

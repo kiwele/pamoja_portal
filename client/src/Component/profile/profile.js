@@ -126,7 +126,7 @@ export default function Profile() {
         <Box>
           <TableContainer component={Paper}>
             <Table
-              sx={{ minWidth: 650 }}
+              sx={{ minWidth: 200 }}
               size="small"
               aria-label="a dense table"
             >
