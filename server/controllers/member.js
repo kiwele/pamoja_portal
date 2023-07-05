@@ -8,6 +8,7 @@
 import { Op } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
+import sequelize from 'sequelize';
 import db from '../database.js';
 import { sendEMail } from '../middlewares/sendEmail.js';
 
@@ -90,8 +91,6 @@ const registerMember = async (req, res) => {
 // update member
 const updateMember = async (req, res) => {
   try {
-    console.log(req.body);
-    console.log(req.params);
     const checkMember = await User.findOne({
       where: { email: req.body.data.email },
     });
@@ -263,7 +262,7 @@ const getAllMembers = async (req, res) => {
         },
       ],
     });
-    res.status(200).json({ data: members });
+    return res.status(200).json({ data: members });
   } catch (error) {
     throw error;
   }
@@ -387,7 +386,6 @@ const deleteMember = async (req, res) => {
 
 const manageMember = async (req, res) => {
   const { Level, status } = req.body;
-  console.log(req.body);
   try {
     await Member.update({
       levelId: Level,
@@ -398,13 +396,65 @@ const manageMember = async (req, res) => {
 
     return res.status(200).json({ message: 'updated successifully' });
   } catch (error) {
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(400).json({ message: 'Something went wrong' });
+  }
+};
+
+// Get all membersr
+const getAllActiveStatus = async (req, res) => {
+  try {
+    const membersActiveness = await ActiveStatus.findAll({
+      attributes: [
+        'status_name',
+      ],
+      include: {
+        model: Member,
+        attributes: [
+          'activeId',
+        ],
+      },
+    });
+
+    const info = [];
+
+    await membersActiveness.forEach((x) => {
+      info.push(x.dataValues.members?.length);
+    });
+    return res.status(200).json({ data: info });
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Get all members levels
+const getAllLevels = async (req, res) => {
+  try {
+    const membersLevels = await Level.findAll({
+      attributes: [
+        'level_name',
+      ],
+      include: {
+        model: Member,
+        attributes: [
+          'levelId',
+        ],
+      },
+    });
+
+
+    const info = [];
+
+    await membersLevels.forEach((x) => {
+      info.push(x.dataValues.members?.length);
+    });
+
+    return res.status(200).json({ data: info, membersLevels });
+  } catch (error) {
+    throw error;
   }
 };
 
 const test = (req, res) => {
-  console.log('hapa tumefika');
-  // console.log(req.body);
   res.status(200).json({ message: 'route reached' });
 };
 
@@ -413,6 +463,8 @@ export {
   registerMember,
   updateMember,
   getAllMembers,
+  getAllActiveStatus,
+  getAllLevels,
   addAcademicInfo,
   updateAcademics,
   workingExperience,

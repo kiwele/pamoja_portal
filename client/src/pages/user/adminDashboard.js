@@ -161,20 +161,21 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* <Grid item xs={12}>
-                <BaarChart />
-              </Grid> */}
-
               <Grid item xs={12}>
+                <BaarChart />
+              </Grid>
+
+              {/* <Grid item xs={12}>
                 <ResetPassword />
               </Grid>
 
               <Grid item xs={12}>
                 <AddProfilePicture />
-              </Grid>
+              </Grid> */}
             </Grid>
-            <Copyright sx={{ pt: 4 }} />
           </Container>
+          <Copyright sx={{ pt: 4 }} />
+
         </Box>
       </Box>
     </ThemeProvider>

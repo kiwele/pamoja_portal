@@ -10,10 +10,6 @@ export default (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         required: true,
       },
-      start_date: {
-        type: Sequelize.DATE,
-        required: true,
-      },
     },
   );
   return {

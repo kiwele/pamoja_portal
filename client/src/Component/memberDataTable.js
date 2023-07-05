@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import axios from "../axios";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { NavLink, Navigate } from "react-router-dom";
@@ -124,7 +124,7 @@ export default function DataTable() {
   }, []);
 
   return (
-    <div style={{ height: 500, width: "100%" }}>
+    <Box style={{ height: 500, width: "100%" }}>
         {showAlert && (
         <Alert severity="success">User deleted successfully</Alert>
       )}
@@ -145,25 +145,26 @@ export default function DataTable() {
         <DataGrid
           rows={data}
           columns={columns}
-          paginationModel={{ page: 0, pageSize: 5 }}
-          checkboxSelection
-          autoHeight  // Enable auto height adjustment
+          // paginationModel={{ page: 0, pageSize: 5 }}
+          // checkboxSelection
+           autoHeight  // Enable auto height adjustment
           disableColumnMenu  // Disable column menu for better responsiveness
-          disableColumnSelector  // Disable column selector for better responsiveness
-          disableDensitySelector  // Disable density selector for better responsiveness
-          disableExtendRowFullWidth  // Disable extending rows to full width for better responsiveness
-          disableSelectionOnClick  // Disable selection on cell click for better responsiveness
-          disableColumnFilter  // Disable column filter for better responsiveness
-          hideFooter  // Hide footer to improve responsiveness
-          disableColumnReorder  // Disable column reordering for better responsiveness
+          // disableColumnSelector  // Disable column selector for better responsiveness
+          // disableDensitySelector  // Disable density selector for better responsiveness
+          // disableExtendRowFullWidth  // Disable extending rows to full width for better responsiveness
+          // disableSelectionOnClick  // Disable selection on cell click for better responsiveness
+          // disableColumnFilter  // Disable column filter for better responsiveness
+          // // hideFooter  // Hide footer to improve responsiveness
+          // disableColumnReorder  // Disable column reordering for better responsiveness
           rowHeight={isSmallScreen ? 48 : 56}  // Adjust row height for small screens
           headerHeight={isSmallScreen ? 48 : 56}  // Adjust header height for small screens
           pageSize={isSmallScreen ? 5 : 10}  // Adjust page size for small screens
           rowsPerPageOptions={isSmallScreen ? [5, 10, 20] : [10, 20, 50]}  // Adjust rows per page options for small screens
+          components={{ Toolbar: GridToolbar }}
         />
       ) : (
         <p>data loading ....</p>
       )}
-    </div>
+    </Box>
   );
 }
