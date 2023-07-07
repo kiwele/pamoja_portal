@@ -5,7 +5,6 @@ export default (sequelize, Sequelize) => {
       workId: {
         type: Sequelize.INTEGER(2),
         autoIncrement: true,
-        defaultValue: null,
         primaryKey: true,
       },
       organization: {
