@@ -25,6 +25,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+router.get('/', (req, res) => {
+  res.status(200).json({ message: 'server is up and running' });
+});
+
 router.post('/register', upload.none(), register);
 
 // user login
