@@ -47,13 +47,8 @@ export default function SignInSide() {
 
     // axiosPrivate(`${BASE_URL}/members`)
 
-    axios
-      .post("http://localhost:4000/login", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
+    axiosPrivate
+      .post("/login", formData)
       .then((response) => {
         console.log(response);
 

@@ -1,9 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import Home from "./pages/Home";
 import { Route, Routes, Link, BrowserRouter } from "react-router-dom";
-import Register from "./pages/register";
 import UserDashboard from "./pages/user/userDashboard";
 import AdminDashboard from "./pages/user/adminDashboard";
 import MemberDashboard from "./pages/member/memberDashboard";
@@ -19,8 +17,6 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/admin_dashboard" element={<AdminDashboard />} />
           <Route path="/members" element={<UserDashboard />} />
           <Route path="/member/:id" element={<AdminViewMember />} />
