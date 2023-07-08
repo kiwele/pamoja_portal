@@ -70,7 +70,9 @@ const userLogin = async (req, res) => {
               id: userExist.dataValues.userId,
               // role: userExist.dataValues.roleId,
             },
-            process.env.ACCESS_TOKEN_SECRETE,
+            {
+              secret: process.env.ACCESS_TOKEN_SECRETE,
+            },
             { expiresIn: '30m' },
           );
 
