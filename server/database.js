@@ -12,17 +12,17 @@ import userRole from './models/userRole.js';
 import project from './models/project.js';
 import level from './models/level.js';
 
-// const sequelize = new Sequelize('pamoja', 'admin', '#Kiwele123', {
-//   host: 'pamoja.ccrssgvdi4ff.eu-north-1.rds.amazonaws.com',
-//   dialect: 'mysql',
-//   port: 3306,
-// });
-
-const sequelize = new Sequelize('Pamoja_portal', 'root', '', {
-  host: 'localhost',
+const sequelize = new Sequelize('pamoja', 'admin', '#Kiwele123', {
+  host: 'pamoja.ccrssgvdi4ff.eu-north-1.rds.amazonaws.com',
   dialect: 'mysql',
   port: 3306,
 });
+
+// const sequelize = new Sequelize('Pamoja_portal', 'root', '', {
+//   host: 'localhost',
+//   dialect: 'mysql',
+//   port: 3306,
+// });
 
 const db = {};
 
