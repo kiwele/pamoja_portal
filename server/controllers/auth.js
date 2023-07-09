@@ -7,6 +7,9 @@ import db from '../database.js';
 
 dotenv.config();
 
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRETE;
+const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRETE;
+
 const { User } = db.user;
 
 // User registration
@@ -73,7 +76,7 @@ const userLogin = async (req, res) => {
               id: userExist.dataValues.userId,
               // role: userExist.dataValues.roleId,
             },
-            process.env.ACCESS_TOKEN_SECRETE,
+            accessTokenSecret,
             { expiresIn: '30m' },
           );
 
@@ -83,7 +86,7 @@ const userLogin = async (req, res) => {
               id: userExist.dataValues.userId,
               role: userExist.dataValues.roleId,
             },
-            process.env.REFRESH_TOKEN_SECRETE,
+            refreshTokenSecret,
             { expiresIn: '1d' },
           );
 
