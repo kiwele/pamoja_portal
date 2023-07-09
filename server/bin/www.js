@@ -6,7 +6,11 @@
 
 import debug from 'debug';
 import http from 'http';
+import dotenv from 'dotenv';
+
 import app from '../app.js';
+
+dotenv.config();
 
 /**
  * Get port from environment and store in Express.

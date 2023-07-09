@@ -4,7 +4,7 @@ import createError from 'http-errors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import dotenv from 'dotenv';
+
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import { fileURLToPath } from 'url';
@@ -15,7 +15,6 @@ import refresh from './routes/refresh.js';
 
 import db from './database.js';
 
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 // eslint-disable-next-line no-unused-vars
