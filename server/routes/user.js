@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get('/', (req, res) => {
-  res.status(200).json({ message: 'server is up and running' });
+  res.status(200).json({ message: `server is up and running on port ${process.env.PORT}` });
 });
 
 router.post('/register', upload.none(), register);

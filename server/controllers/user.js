@@ -5,7 +5,6 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable camelcase */
 import bcrypt from 'bcryptjs';
-import { Op } from 'sequelize';
 import db from '../database.js';
 
 const { User } = db.user;
@@ -45,8 +44,6 @@ const resetPassword = async (req, res) => {
 
 // admin edit user
 const uploadPicture = async (req, res) => {
-  console.log('tupo hapa');
-
   try {
     const userDetails = {
       profile_picture: req.file.filename,
