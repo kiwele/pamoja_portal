@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
   const ActiveStatus = sequelize.define(
-    'activeStatus',
+    'activestatus',
     {
       activeId: {
         type: Sequelize.INTEGER(1),

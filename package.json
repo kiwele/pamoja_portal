@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "react-bootstrap": "^2.7.4",
-    "react-data-table-component": "^7.5.3",
-    "styled-components": "^5.3.10"
-  }
-}

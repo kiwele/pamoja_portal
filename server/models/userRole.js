@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
   const UserRole = sequelize.define(
-    'userRole',
+    'userrole',
     {
       roleId: {
         type: Sequelize.INTEGER(1),

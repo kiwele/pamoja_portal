@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
   const MaritalStatus = sequelize.define(
-    'maritalStatus',
+    'maritalstatus',
     {
       statusId: {
         type: Sequelize.INTEGER(1),
