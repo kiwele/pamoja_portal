@@ -53,7 +53,7 @@ const register = async (req, res) => {
 
 // handle user login
 const userLogin = async (req, res) => {
-  console.log(process.env.ACCESS_TOKEN_SECRETE);
+  console.log(process.env.PORT);
   // check for the empty object
   function isEmpty(object) {
     return Object.keys(object).length === 0;
