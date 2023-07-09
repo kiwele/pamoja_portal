@@ -67,5 +67,9 @@ app.use((err, req, res) => {
   res.status(err.status || 500);
   res.send(err.status);
 });
+const PORT = process.env.PORT || '5000';
 
+app.listen(PORT, () => {
+  console.log(`server listen on port ${PORT}`);
+});
 export default app;
