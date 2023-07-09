@@ -2,7 +2,10 @@
 /* eslint-disable import/extensions */
 import bcrypt from 'bcryptjs';
 import Jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import db from '../database.js';
+
+dotenv.config();
 
 const { User } = db.user;
 
