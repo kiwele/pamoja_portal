@@ -70,9 +70,7 @@ const userLogin = async (req, res) => {
               id: userExist.dataValues.userId,
               // role: userExist.dataValues.roleId,
             },
-            {
-              secret: 'ntgx488764tgbhssFGHJF387YDIHJD',
-            },
+            process.env.ACCESS_TOKEN_SECRETE,
             { expiresIn: '30m' },
           );
 
@@ -82,9 +80,7 @@ const userLogin = async (req, res) => {
               id: userExist.dataValues.userId,
               role: userExist.dataValues.roleId,
             },
-            {
-              secret: 'AFGBHDNH23T46TDYHFY7YHNDFYAND',
-            },
+            process.env.REFRESH_TOKEN_SECRETE,
             { expiresIn: '1d' },
           );
 
