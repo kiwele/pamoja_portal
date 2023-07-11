@@ -8,7 +8,6 @@
 import { Op } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
-import sequelize from 'sequelize';
 import db from '../database.js';
 import { sendEMail } from '../middlewares/sendEmail.js';
 
@@ -22,19 +21,6 @@ const { ActiveStatus } = db.activeStatus;
 const { Projects } = db.project;
 const { Level } = db.level;
 
-// // get user image
-// const getUser = async (req, res) => {
-//   try {
-//     const userFound = await User.findOne({
-//       where: { userId: req.userDetails.id },
-//       attribute: ['profile_picture'],
-//     });
-
-//     res.status(200).json(userFound);
-//   } catch (error) {
-//     throw error;
-//   }
-// };
 
 const registerMember = async (req, res) => {
   try {
@@ -143,7 +129,6 @@ const updateMember = async (req, res) => {
 
 // add academic informations
 const addAcademicInfo = async (req, res) => {
-  // console.log(req.body);
   try {
     await SchoolStudied.create({
       school_names: req.body.schoolName,
@@ -171,8 +156,6 @@ const addProject = async (req, res) => {
     file: req.file.filename,
     memberId: req.userDetails.id,
   };
-  console.log(req.file);
-  console.log(req.body);
   try {
     await Projects.create(data);
     return res.status(200).json({
@@ -305,7 +288,8 @@ const getAcademicInfo = async (req, res) => {
 
     return res.status(200).json({ data: academicInfo });
   } catch (error) {
-    return res.status(500).json({ message: 'internal server error' });
+    console.log(error);
+    // return res.status(500).json({ message: 'internal server error' });
   }
 };
 
