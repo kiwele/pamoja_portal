@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
   const SchoolStudied = sequelize.define(
-    'schoolStudied',
+    'schoolstudied',
     {
       schoolId: {
         type: Sequelize.INTEGER(3),

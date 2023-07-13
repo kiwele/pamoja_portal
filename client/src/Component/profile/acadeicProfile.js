@@ -59,7 +59,10 @@ export default function AcademicProfile() {
 
   useEffect(() => {
     axiosPrivate("/get_academic_info").then((e) => {
+      console.log(e.data);
       setData(e.data.data);
+    }).catch((error) => {
+      console.log(error);
     });
   }, [showForm, showEditForm]);
   // showForm

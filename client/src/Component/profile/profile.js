@@ -75,7 +75,7 @@ export default function Profile() {
 
   useEffect(() => {
     axiosPrivate("/personal_info").then(async (e) => {
-      await setData(e.data.data);
+      setData(e.data.data);
       // toast.success("updated successifully");
     });
   }, [showForm]);
@@ -87,8 +87,8 @@ export default function Profile() {
     createData("Email", data.email),
     createData("Phone number", data.phone_number),
     createData("Gender", data.gender),
-    createData("Marital status", data.maritalStatus?.status_name),
-    createData("Curent Region", data && data.memberLocations && data.memberLocations[0] && data.memberLocations[0].region
+    createData("Marital status", data.maritalstatus?.status_name),
+    createData("Curent Region", data && data.memberlocations && data.memberlocations[0] && data.memberlocations[0].region
     ),
   ];
 

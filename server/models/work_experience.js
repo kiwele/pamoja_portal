@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
   const WorkExperience = sequelize.define(
-    'workExperience',
+    'workexperience',
     {
       workId: {
         type: Sequelize.INTEGER(2),

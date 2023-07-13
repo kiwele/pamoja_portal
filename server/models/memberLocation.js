@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
   const MemberLocation = sequelize.define(
-    'memberLocation',
+    'memberlocation',
     {
       locationId: {
         type: Sequelize.INTEGER(3),

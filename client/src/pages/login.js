@@ -18,10 +18,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { axiosPrivate } from "../axios";
 import useAuth from "../hooks/useAuth";
 
-const BASE_URL = process.env.BASE_URL;
 const theme = createTheme();
 
 export default function SignInSide() {
@@ -50,7 +48,6 @@ export default function SignInSide() {
     axiosPrivate
       .post("/login", formData)
       .then((response) => {
-        console.log(response);
 
         if (response.status === 200 && response.data.user.role === 1) {
           // setAlert(true);
