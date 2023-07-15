@@ -51,7 +51,7 @@ function EditPersonalInfo({showStatus, inputData, handle}) {
     mname: inputData?.last_name,
     email: inputData?.email,
     phone: inputData?.phone_number,
-    region: inputData?.memberLocations[0].region,
+    region: inputData?.memberlocations[0].region,
     gender: '',
   });
 
