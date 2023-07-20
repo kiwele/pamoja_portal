@@ -5,13 +5,9 @@ import env from 'dotenv';
 
 env.config();
 
-const generateAccessToken = (user) => {
-  Jwt.sign(user, process.env.ACCESS_TOKEN_SECRETE, { expiresIn: '10m' });
-};
+const generateAccessToken = (user) => Jwt.sign(user, process.env.ACCESS_TOKEN_SECRETE, { expiresIn: '10m' });
 
-const generateRefreshToken = (user) => {
-  Jwt.sign({ user }, process.env.REFRESH_TOKEN_SECRETE, { expiresIn: '1d' });
-};
+const generateRefreshToken = (user) => Jwt.sign({ user }, process.env.REFRESH_TOKEN_SECRETE, { expiresIn: '1d' });
 
 // verifying token
 const verifyaccessToken = async (req, res, next) => {
@@ -43,9 +39,6 @@ const verifyaccessToken = async (req, res, next) => {
 
 // verifying token
 const verifyrefreshToken = async (req, res, next) => {
-  console.log(req.cookies);
-
-  console.log(`COOKIES: ${req.cookies['refreshToken']}`);
   // check if token exist
   const refreshtoken = req.cookies['refreshToken'] || req.headers.refreshtoken;
   if (!refreshtoken) {
@@ -72,7 +65,7 @@ const verifyrefreshToken = async (req, res, next) => {
           { expiresIn: '30m' },
         );
 
-        res.status(201).json({ role: user.role, accessToken: accessToken });
+        return res.status(201).json({ role: user.role, accessToken: accessToken });
       }
       next();
     },

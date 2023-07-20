@@ -80,7 +80,13 @@ export default function Profile() {
     });
   }, [showForm]);
 
-  const fullName = data?.first_name + " " + data?.last_name;
+  // const fullName =`${data?.first_name ?? " "} ${data?.last_name ?? " "}`;
+
+  const firstName = data?.first_name;
+const lastName = data?.last_name;
+const fullName = firstName && lastName ? `${firstName} ${lastName}` : " ";
+
+  // const fullName = data?.first_name + " " + data?.last_name;
   // let marital = data.maritalStatus.status_name;
   const rows = [
     createData("Full name", fullName),
@@ -88,7 +94,12 @@ export default function Profile() {
     createData("Phone number", data.phone_number),
     createData("Gender", data.gender),
     createData("Marital status", data.maritalstatus?.status_name),
-    createData("Curent Region", data && data.memberlocations && data.memberlocations[0] && data.memberlocations[0].region
+    createData(
+      "Curent Region",
+      data &&
+        data.memberlocations &&
+        data.memberlocations[0] &&
+        data.memberlocations[0].region
     ),
   ];
 
@@ -120,37 +131,41 @@ export default function Profile() {
             // color: blue,
           }}
         >
-          <Typography>{data.first_name + " " + data.last_name}</Typography>
+          <Typography>{fullName ? fullName : " "}</Typography>
         </Box>
 
         <Box>
-          <TableContainer component={Paper}>
-            <Table
-              sx={{ minWidth: 200 }}
-              size="small"
-              aria-label="a dense table"
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell> PERSONAL INFORMATIONS</TableCell>
-                  {/* <TableCell align="right"></TableCell> */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="left">{row.info}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <TableContainer component={Paper}>
+  <Table sx={{ minWidth: 200 }} size="small" aria-label="a dense table">
+    <TableHead>
+      <TableRow>
+        <TableCell>PERSONAL INFORMATION</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {rows.length > 0 ? (
+        rows.map((row) => (
+          <TableRow
+            key={row.name}
+            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          >
+            <TableCell component="th" scope="row">
+              {row.name}
+            </TableCell>
+            <TableCell align="left">{row.info}</TableCell>
+          </TableRow>
+        ))
+      ) : (
+        <TableRow>
+          <TableCell colSpan={2} align="center">
+            No data available
+          </TableCell>
+        </TableRow>
+      )}
+    </TableBody>
+  </Table>
+</TableContainer>
+
 
           <Box>
             <Box
@@ -176,7 +191,11 @@ export default function Profile() {
                   </IconButton>
                 </div>
 
-                <EditPersonalInfo showStatus={showForm} inputData={data} handle ={handleHideForm} />
+                <EditPersonalInfo
+                  showStatus={showForm}
+                  inputData={data}
+                  handle={handleHideForm}
+                />
               </Paper>
             )}
           </Box>

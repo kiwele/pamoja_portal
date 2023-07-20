@@ -56,7 +56,10 @@ export default function MemberPersonalInfo() {
     });
   }, []);
 
-  const fullName = data.first_name + " " + data.last_name;
+  // const fullName = data.first_name + " " + data.last_name;
+  const firstName = data?.first_name;
+  const lastName = data?.last_name;
+  const fullName = firstName && lastName ? `${firstName} ${lastName}` : "";
 
   const rows = [
     createData("Full name", fullName),
@@ -96,7 +99,7 @@ export default function MemberPersonalInfo() {
             // color: blue,
           }}
         >
-          <Typography>{data.first_name + " " + data.last_name}</Typography>
+          <Typography>{fullName ? fullName : " "}</Typography>
         </Box>
 
         <Box>
@@ -113,17 +116,25 @@ export default function MemberPersonalInfo() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="left">{row.info}</TableCell>
-                  </TableRow>
-                ))}
+              {rows.length > 0 ? (
+        rows.map((row) => (
+          <TableRow
+            key={row.name}
+            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          >
+            <TableCell component="th" scope="row">
+              {row.name}
+            </TableCell>
+            <TableCell align="left">{row.info}</TableCell>
+          </TableRow>
+        ))
+      ) : (
+        <TableRow>
+          <TableCell colSpan={2} align="center">
+            No data available
+          </TableCell>
+        </TableRow>
+      )}
               </TableBody>
             </Table>
           </TableContainer>

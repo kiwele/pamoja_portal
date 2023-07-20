@@ -15,7 +15,6 @@ import refresh from './routes/refresh.js';
 
 import db from './database.js';
 
-
 const __filename = fileURLToPath(import.meta.url);
 // eslint-disable-next-line no-unused-vars
 const __dirname = path.dirname(__filename);
@@ -25,7 +24,6 @@ db.sequelize.sync({ alter: true });
 
 const app = express();
 
-// const whitelisted = ['http://localhost:3000'];
 const corsOptions = {
   // origin: 'http://localhost:3000',
   origin: 'http://13.48.59.172',

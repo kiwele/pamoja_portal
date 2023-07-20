@@ -44,8 +44,7 @@ _database.default.sequelize.sync({
 }); // db.sequelize.sync({ force: true });
 
 
-const app = (0, _express.default)(); // const whitelisted = ['http://localhost:3000'];
-
+const app = (0, _express.default)();
 const corsOptions = {
   origin: 'http://localhost:3000',
   // origin: 'http://13.48.59.172',
