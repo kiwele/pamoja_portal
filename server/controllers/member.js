@@ -170,10 +170,7 @@ const getProjects = async (req, res) => {
   try {
     const projectsInfo = await Projects.findAll({
       where: { memberId: req.userDetails.id },
-      // attributes: ['projectId ', 'title', 'description', 'file'],
     });
-
-    console.log(projectsInfo);
 
     return res.status(200).json({ data: projectsInfo });
   } catch (error) {
@@ -198,7 +195,7 @@ const updateAcademics = async (req, res) => {
         },
       },
     );
-    res.status(204).json({
+    return res.status(204).json({
       message: 'Academics updated successifully',
     });
   } catch (error) {

@@ -28,7 +28,7 @@ export default function ImageAvatars({ height, width }) {
           <Avatar
           alt="User"
           sx={{ height: height, width: width }}
-          src={`//localhost:5000/uploads/${data}`}
+          src={`//13.48.59.172:5000/uploads/${data}`}
         />
         ) :
         (

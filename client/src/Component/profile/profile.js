@@ -75,19 +75,17 @@ export default function Profile() {
 
   useEffect(() => {
     axiosPrivate("/personal_info").then(async (e) => {
+      console.log(e.data.data);
       setData(e.data.data);
       // toast.success("updated successifully");
     });
   }, [showForm]);
 
-  // const fullName =`${data?.first_name ?? " "} ${data?.last_name ?? " "}`;
 
   const firstName = data?.first_name;
 const lastName = data?.last_name;
 const fullName = firstName && lastName ? `${firstName} ${lastName}` : " ";
 
-  // const fullName = data?.first_name + " " + data?.last_name;
-  // let marital = data.maritalStatus.status_name;
   const rows = [
     createData("Full name", fullName),
     createData("Email", data.email),

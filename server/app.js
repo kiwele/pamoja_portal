@@ -25,8 +25,8 @@ db.sequelize.sync({ alter: true });
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
-  // origin: 'http://13.48.59.172',
+  // origin: 'http://localhost:3000',
+  origin: 'http://13.48.59.172',
   // origin: ['http://localhost:3000', 'http://localhost:4000'],
   optionsSuccessStatus: 200,
   methods: ['GET', 'PUT', 'POST'],
