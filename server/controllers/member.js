@@ -267,7 +267,7 @@ const personalInfo = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ data: userInfo });
+    return res.status(200).json({ data: userInfo });
   } catch (error) {
     console.log(error);
   }
@@ -424,7 +424,6 @@ const getAllLevels = async (req, res) => {
         ],
       },
     });
-
 
     const info = [];
 
